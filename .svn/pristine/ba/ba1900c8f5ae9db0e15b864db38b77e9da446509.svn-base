@@ -1,0 +1,161 @@
+# coding: utf8
+#可以在key前面加上':'，那么在引用时就可以直接使用symbol类型的key,如$a[:keyword][:hope]，若不加冒号，则为string类型的key,如$a['keyword']['hope']。
+
+login_hash:
+  :gw_ip: 122.168.8.106
+  :user: admin
+  :passwd: admin
+
+# 用户名密码错误
+login_hash2:
+  :gw_ip: 200.200.85.26
+  :user: admin
+  :passwd: admin
+
+# 网关Ip不存在
+login_hash3:
+  :gw_ip: 200.200.200.200
+  :user: admin
+  :passwd: sangfor
+
+# 执行自动化用例的设备名称,与test_device.yml中的一致
+device_name : AF设备
+# ADSL拨号服务器(加速设备)的帐号,执行自动化用例前要先启动拨号服务
+ADSLAccount : test1
+# ADSL拨号服务器(加速设备)的密码
+ADSLPasswd : test
+# ADSL拨号服务提供给客户端的IP地址,启动拨号服务时指定最多支持的客户端数量为1
+ADSLClientIP : 172.172.172.200
+# 测试使用的物理接口使用的管理IP,可用来上外网
+StaticIPOnLine : 200.200.85.124/22
+# 测试使用的物理接口使用的网关,可用来上外网
+GateWayOnLine : 200.200.87.254
+# 某个执行主机上的web服务地址
+WebServiceAddr : http://200.200.88.200
+
+# 与设备建立ssh连接,设备的信息
+pshell_hash:
+  :host: 200.200.85.26
+  :port : 22345
+  :user: admin
+  :passwd: lijunsangforligang
+
+# 与设备建立ssh连接,设备的错误信息
+pshell_hash2:
+  :host: 200.200.85.26
+  :port : 22345
+  :user: admin1
+  :passwd: lijunsangforligang2
+# 执行主机的某个IP
+LocalIP : 200.200.84.21
+# 内网FTP服务IP
+FtpServer : 200.200.85.123
+# 内网FTP服务用户名
+FtpUser : anonymous
+# 内网FTP服务密码
+FtpPasswd :
+# DNS服务上设置的,FTP服务器对应的域名,对应的IP是200.200.188.6
+FtpDomainName : www.afbvttest.com.cn
+# DNS服务上设置的,FTP服务器对应的域名,对应的IP是200.200.188.6
+FtpDomainIp : 200.200.188.6
+# 域名服务器IP
+DNSServer : 200.200.85.124
+# 错误的
+wFtpDomainIp : 200.200.188.8
+# 数据中心登录的信息
+dc_login_hash:
+  :gw_ip: 200.200.88.
+  :port : 85
+  :user: admin
+  :passwd: sangfor
+
+# 邮件服务器的信息
+MailServer : 200.200.85.123
+SmtpPort : 25
+MailDomain : afbvt.com
+MailUser : afbvtuser1
+MailPasswd : abc
+MailSender : afbvtuser1@afbvt.com
+Pop3Port : 110
+# 天涯社区的地址
+TianYaAddress : http://www.tianya.cn
+# 天涯社区的用户
+TianYaUser : sangforafbvtuser
+# 天涯社区用户的密码
+TianYaPasswd : afbvt123456
+# 使用升级客户端连接设备的信息
+updater_login_hash:
+  :host: 200.200.85.126
+  :dlanpasswd: dlanrecover
+# 使用升级客户端连接设备的信息,错误的密码
+updater_login_hash2:
+  :host: 200.200.85.126
+  :dlanpasswd: dlanrecover2
+# 使用升级客户端连接设备的信息,错误的设备IP
+updater_login_hash3:
+  :host: 200.200.85.129
+  :dlanpasswd: dlanrecover
+# 发送的数据包文件
+packfile : teardrop攻击.cscpkt
+#验证添加发包规则
+webrule1:
+  :flag: 是
+  :protocol: tcp
+  :sourceip: 200.200.84.0/22
+  :sourceport: any
+  :direction: <>
+  :destionationip: 100.0.0.0/8
+  :destionationport: any
+  :msg: test
+  :sid: 10000
+  :classtype: attempted-admin
+  :holetypeid: 3
+  :ruletype: 3
+  :other: ""
+  :number: 1
+webrule2:
+  :protocol: tcp
+  :sourceip: 200.200.84.0/22
+  :sourceport: any
+  :direction: <>
+  :destionationip: 100.0.0.0/8
+  :destionationport: any
+  :msg: test
+  :sid: 10000
+  :classtype: attempted-admin
+  :holetypeid: 3
+  :ruletype: 3
+  :other: "pcre:\"/\\n/\";"
+  :number: 1  
+webrulerebuild:
+  :flag: 是
+  :protocol: tcp
+  :sourceip: 200.200.84.0/22
+  :sourceport: any
+  :direction: <>
+  :destionationip: 100.0.0.0/8
+  :destionationport: any
+  :msg: test
+  :sid: 10000
+  :classtype: attempted-admin
+  :holetypeid: 1
+  :ruletype: 3
+  :other: "pcre:\"/\\n/\";"
+  :number: 1 
+websidincrease:
+  :flag: 是
+  :protocol: tcp
+  :sourceip: 200.200.84.0/22
+  :sourceport: any
+  :direction: <>
+  :destionationip: 100.0.0.0/8
+  :destionationport: any
+  :msg: testXYXYXY
+  :sid: 10000
+  :classtype: attempted-admin
+  :holetypeid: 3
+  :ruletype: 3
+  :other: "content:XYXYXY;"
+  :number: 5  
+  
+  

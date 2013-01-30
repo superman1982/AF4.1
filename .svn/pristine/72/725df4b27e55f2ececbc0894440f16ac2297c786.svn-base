@@ -1,0 +1,130 @@
+# encoding: utf-8
+=begin rdoc
+作用: 用作对应界面的流控虚拟线路配置相关操作
+维护记录:
+维护人      时间                  行为
+[王沃伦]     2012-12-24           创建
+=end
+
+module DeviceConsole
+
+  module FluxManager
+
+
+=begin rdoc
+类名: VirtualLine
+描述: 用作对应界面的流控虚拟线路配置相关操作
+=end
+    class VirtualLine < ATT::Base
+
+=begin rdoc
+关键字名: 添加虚拟线路
+描述: 添加虚拟线路
+维护人: 王沃伦
+参数:
+id=>out_eth,name=>外出接口,type=>s,must=>false,default=>"eth2",value=>"{text}",descrip=>"带Wan属性的外出接口"
+id=>up,name=>上行速率,type=>s,must=>false,default=>"1024",value=>"{text}",descrip=>"上行速率"
+id=>down,name=>下行速率,type=>s,must=>false,default=>"1024",value=>"{text}",descrip=>"下行速率"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def add_vline(hash={})
+        json_hash = get_add_vline_hash(hash)
+        DeviceConsole::check_post_result(FluxVlineCGI,json_hash,{"info" => "添加虚拟线路"})
+      end
+
+=begin rdoc
+关键字名: 删除一条虚拟线路
+描述: 删除一条虚拟线路
+维护人: 王沃伦
+参数:
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def del_vline(hash={})
+        json_hash = get_del_vline_hash(hash)
+        DeviceConsole::check_post_result(FluxVlineCGI,json_hash,{"info" => "删除虚拟线路"})
+      end
+
+=begin rdoc
+关键字名: 编辑虚拟线路
+描述: 编辑虚拟线路
+维护人: 王沃伦
+参数:
+id=>line_num,name=>线路号,type=>s,must=>true,default=>"2",value=>"1|2|3|4|5|6|7|8",descrip=>"这个线路号是界面显示的那个线路名称的号"
+id=>out_eth,name=>外出接口,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"带Wan属性的外出接口"
+id=>up,name=>上行速率,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"上行速率"
+id=>down,name=>下行速率,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"下行速率"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def edit_vline(hash={})
+        json_hash = get_edit_vline_hash(hash)
+        DeviceConsole::check_post_result(FluxVlineCGI,json_hash,{"info" => "编辑虚拟线路"})
+      end
+
+=begin rdoc
+关键字名: 添加虚拟线路规则
+描述: 添加虚拟线路规则
+维护人: 王沃伦
+参数:
+id=>type,name=>协议类型,type=>s,must=>false,default=>"全部",value=>"{text}",descrip=>""
+id=>proto_num,name=>协议号,type=>s,must=>false,default=>"0",value=>"{text}",descrip=>""
+id=>lan_ip,name=>内网IP选择,type=>s,must=>false,default=>"所有IP",value=>"所有IP|指定IP范围",descrip=>""
+id=>lan_ip_range,name=>内网IP范围,type=>s,must=>false,default=>"2.2.2.2",value=>"{text}",descrip=>""
+id=>lan_port,name=>内网端口选择,type=>s,must=>false,default=>"所有端口",value=>"所有端口|指定端口范围",descrip=>""
+id=>lan_port_range,name=>内网端口范围,type=>s,must=>false,default=>"111",value=>"{text}",descrip=>""
+id=>wan_ip,name=>外网IP选择,type=>s,must=>false,default=>"所有IP",value=>"所有IP|指定IP范围",descrip=>""
+id=>wan_ip_range,name=>外网IP范围,type=>s,must=>false,default=>"1.1.1.1",value=>"{text}",descrip=>""
+id=>wan_port,name=>外网端口选择,type=>s,must=>false,default=>"所有端口",value=>"所有端口|指定端口范围",descrip=>""
+id=>wan_port_range,name=>外网端口范围,type=>s,must=>false,default=>"100",value=>"{text}",descrip=>""
+id=>target_line,name=>目标线路,type=>s,must=>false,default=>"1",value=>"1|2|3|4|5|6|7|8",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def add_vline_rule(hash={})
+        json_hash = get_add_vline_rule_hash(hash)
+        DeviceConsole::check_post_result(FluxVlineCGI,json_hash,{"info" => "添加虚拟线路"})
+      end
+
+=begin rdoc
+关键字名: 删除虚拟线路规则
+描述: 删除虚拟线路规则
+维护人: 王沃伦
+参数:
+id=>name,name=>删除序号,type=>s,must=>false,default=>"全部删除",value=>"{text}",descrip=>"策略的序号,以@;@作为分隔符号分隔,如果要全部删除,则这里填 '全部删除' 即可"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def del_vline_rule(hash={})
+        json_hash = get_del_vline_rule_hash(hash)
+        DeviceConsole::check_post_result(FluxVlineCGI,json_hash,{"info" => "删除虚拟线路规则"})
+      end
+
+=begin rdoc
+关键字名: 编辑虚拟线路规则
+描述: 编辑虚拟线路规则
+维护人: 王沃伦
+参数:
+id=>name,name=>规则序号,type=>s,must=>false,default=>"1",value=>"{text}",descrip=>"编辑的规则的排序号"
+id=>type,name=>协议类型,type=>s,must=>false,default=>"全部",value=>"{text}",descrip=>""
+id=>proto_num,name=>协议号,type=>s,must=>false,default=>"0",value=>"{text}",descrip=>""
+id=>lan_ip,name=>内网IP选择,type=>s,must=>false,default=>"所有IP",value=>"所有IP|指定IP范围",descrip=>""
+id=>lan_ip_range,name=>内网IP范围,type=>s,must=>false,default=>"2.2.2.2",value=>"{text}",descrip=>""
+id=>lan_port,name=>内网端口选择,type=>s,must=>false,default=>"所有端口",value=>"所有端口|指定端口范围",descrip=>""
+id=>lan_port_range,name=>内网端口范围,type=>s,must=>false,default=>"111",value=>"{text}",descrip=>""
+id=>wan_ip,name=>外网IP选择,type=>s,must=>false,default=>"所有IP",value=>"所有IP|指定IP范围",descrip=>""
+id=>wan_ip_range,name=>外网IP范围,type=>s,must=>false,default=>"1.1.1.1",value=>"{text}",descrip=>""
+id=>wan_port,name=>外网端口选择,type=>s,must=>false,default=>"所有端口",value=>"所有端口|指定端口范围",descrip=>""
+id=>wan_port_range,name=>外网端口范围,type=>s,must=>false,default=>"100",value=>"{text}",descrip=>""
+id=>target_line,name=>目标线路,type=>s,must=>false,default=>"1",value=>"1|2|3|4|5|6|7|8",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def edit_vline_rule(hash={})
+        json_hash = get_edit_vline_rule_hash(hash)
+        DeviceConsole::check_post_result(FluxVlineCGI,json_hash,{"info" => "添加虚拟线路"})
+      end
+
+
+      #end of class VirtualLine
+    end
+    #don't add any code after here.
+
+  end
+
+end

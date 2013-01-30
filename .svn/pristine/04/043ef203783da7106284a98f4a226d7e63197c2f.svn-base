@@ -1,0 +1,113 @@
+# encoding: utf-8
+=begin rdoc
+作用: 这个文件对应配置流控的通道
+维护记录:
+维护人      时间                  行为
+[王沃伦]     2012-12-24           创建
+=end
+
+module DeviceConsole
+
+  module FluxManager
+
+
+=begin rdoc
+类名: PassageWay
+描述: 对应流控通道的配置
+=end
+    class PassageWay < ATT::Base
+
+=begin rdoc
+关键字名: 启禁流控流控管理
+描述: 启禁流控流控管理
+维护人: 王沃伦
+参数:
+id=>enable,name=>启禁流控,type=>s,must=>true,default=>"启用",value=>"启用|禁用",descrip=>"启用流控还是禁用流控"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败",descrip=>"期望结果"
+=end
+      def enable_disable_fluxmanage(hash)
+        json_hash = get_enable_disable_hash(hash)
+        check_post_result(FluxManagerCGI,json_hash,{"info" => "启禁流控流控管理"})
+      end
+
+=begin rdoc
+关键字名: 添加流控通道
+描述: 添加流控通道
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def add_passage(hash={})
+        json_hash = get_add_passage_hash(hash)
+      end
+
+=begin rdoc
+关键字名: 删除流控通道
+描述: 删除流控通道
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def del_passage(hash={})
+      end
+
+=begin rdoc
+关键字名: 编辑流控通道
+描述: 编辑流控通道
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def edit_passage(hash={})
+      end
+
+=begin rdoc
+关键字名: 添加流控排除策略
+描述: 添加流控排除策略
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def add_exclude_rule(hash={})
+      end
+
+=begin rdoc
+关键字名: 修改流控排除策略
+描述: 修改流控排除策略
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def edit_exclude_rule(hash={})
+      end
+
+=begin rdoc
+关键字名: 删除流控排除策略
+描述: 删除流控排除策略
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def del_exclude_rule(hash={})
+      end
+
+
+      #end of class PassageWay
+    end
+    #don't add any code after here.
+
+  end
+
+end

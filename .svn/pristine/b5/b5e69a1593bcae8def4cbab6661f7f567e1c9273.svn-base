@@ -1,0 +1,65 @@
+# coding: utf-8
+require 'lib/util/autoit'
+module LocalPc
+  module NetworkServer
+    module AutoitxStartServerHelper
+      def tcp_server_run(hash)
+        exist_flag=false
+        AF::AutoIt.get_hendles_by_pid_name(nil,"Server")do |handlers|
+          handlers.each{|handle|
+            port = AF::AutoIt.ControlGetText("[HANDLE:#{handle}]","","TEdit1")
+            status = AF::AutoIt.ControlGetText("[HANDLE:#{handle}]","","TButton1")
+            if port == hash[:port]&& status=="Stop"
+              ATT::KeyLog.info("tcp server在#{hash[:port]}已经开启")
+              exist_flag=true
+              break
+            end
+          }
+        end
+        return_ok if exist_flag==true
+        processid, handle = AF::AutoIt.autoitx_run_win_program(TcpServerPath,20,{"title" => "Server"})
+        flag=false
+        if handle != ""
+          puts handle
+          AF::AutoIt.ControlSetText("[HANDLE:#{handle}]","","TEdit1",hash[:port])
+          AF::AutoIt.ControlClick("[HANDLE:#{handle}]","","TButton1")
+          #AF::AutoIt.ControlSetText("Server","","TEdit1",hash[:port])
+          #AF::AutoIt.ControlClick("Server","","TButton1")
+          if AF::AutoIt.WinWait("Tcp server","socket error",5)==1
+            ATT::KeyLog.info(AF::AutoIt.ControlGetText("Tcp server","socket error","Static2"))
+            AF::AutoIt.ControlClick("Tcp server","socket error","Button1")
+            AF::AutoIt.WinClose("[HANDLE:#{handle}]","")
+          else
+            status=AF::AutoIt.ControlGetText("[HANDLE:#{handle}]","","TButton1")
+            sleep 1
+            flag=true if status=="Stop"
+          end
+        end
+        if(flag==true)
+          ATT::KeyLog.info("开启tcpserver成功")
+          return_ok
+        else
+          ATT::KeyLog.info("开启tcpserver失败")
+          return_fail
+        end
+      end
+
+      def tcp_server_stop(hash)
+        AF::AutoIt.get_hendles_by_pid_name(nil,"Server")do |handlers|
+          handlers.each{|handle|
+            port = AF::AutoIt.ControlGetText("[HANDLE:#{handle}]","","TEdit1")
+            status = AF::AutoIt.ControlGetText("[HANDLE:#{handle}]","","TButton1")
+            if port == hash[:port]
+              ATT::KeyLog.info("tcp server在#{hash[:port]}已经开启,现在关闭它")
+              AF::AutoIt.WinClose("[HANDLE:#{handle}]","")
+              return_ok
+              break
+            end
+          }
+          ATT::KeyLog.info("关闭tcpserver失败,没找到对应的窗口")
+          return_fail
+        end
+      end
+    end
+  end
+end

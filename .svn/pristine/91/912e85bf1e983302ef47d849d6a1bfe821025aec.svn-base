@@ -1,0 +1,104 @@
+# coding: utf-8
+module DeviceConsole
+  module FluxManager
+    module VirtualLineHelper
+      def get_add_vline_hash(hash)
+        result_hash = {"opr" => "addLine"}
+        result_hash["data"] = get_vline_data_hash(hash)
+        return result_hash
+      end
+      def get_edit_vline_hash(hash)
+        result_hash = {"opr" => "modifyLine"}
+        result_hash["data"] = get_vline_data_hash(hash)
+        return result_hash
+      end
+      def get_del_vline_hash(hash)
+        result_hash = {"opr" => "deleteLine"}
+        result_hash["line"] = hash[:line_num].to_i
+        return result_hash
+      end
+      def get_vline_data_hash(hash)
+        data_hash = {}
+        data_hash["line"] = ""
+        data_hash["name"] = hash[:name]
+        data_hash["out_eth"] = hash[:out_eth]
+        data_hash["up"] = hash[:up]
+        data_hash["down"] = hash[:down]
+        return data_hash
+      end
+
+      def get_add_vline_rule_hash(hash)
+        result_hash = {"opr" => "add"}
+        result_hash["data"] = get_vline_rule_data_hash(hash)
+        return result_hash
+      end
+      def get_edit_vline_rule_hash(hash)
+        result_hash = {"opr" => "modify"}
+        result_hash["data"] = get_vline_rule_data_hash(hash)
+        return result_hash
+      end
+      def get_del_vline_rule_hash(hash)
+        result_hash = {"opr" => "delete"}
+        case hash[:name]
+        when "全部"
+          result_hash["name"] = get_all_object_names(FluxManagerCGI,"删除虚拟线路规则")
+        else
+          result_hash["name"] = []
+          result_hash["name"] << get_all_object_names(FluxManagerCGI,"删除虚拟线路规则")[hash[:name].to_i]
+        end
+        return result_hash
+      end
+
+      def get_vline_rule_data_hash(hash)
+        data_hash = {"name" => ""}
+        data_hash["protocol"] = { "type" => hash[:type], "number" => hash[:proto_num]}
+        data_hash["protocol"]["lan"] = {}
+        if hash[:lan_ip] == "所有IP"
+          data_hash["protocol"]["lan"]["lan_ip"] = "all_ip"
+          data_hash["protocol"]["lan"]["all_ip"] = true
+          data_hash["protocol"]["lan"]["specified_ip"]["enable"] = false
+        elsif hash[:lan_ip] == "指定IP范围"
+          data_hash["protocol"]["lan"]["lan_ip"] = "specified_ip"
+          data_hash["protocol"]["lan"]["all_ip"] = false
+          data_hash["protocol"]["lan"]["specified_ip"]["enable"] = true
+        end
+        if hash[:lan_port] == "所有端口"
+          data_hash["protocol"]["lan"]["lan_port"] = "all_port"
+          data_hash["protocol"]["lan"]["all_port"] = true
+          data_hash["protocol"]["lan"]["specified_ip"]["enable"] = false
+        elsif hash[:lan_port] == "指定端口范围"
+          data_hash["protocol"]["lan"]["lan_port"] = "specified_port"
+          data_hash["protocol"]["lan"]["all_port"] = false
+          data_hash["protocol"]["lan"]["specified_port"]["enable"] = true
+        end
+        data_hash["protocol"]["lan"]["specified_ip"]["ip_range"] = hash[:lan_ip_range]
+        data_hash["protocol"]["lan"]["specified_port"]["port_range"] = hash[:lan_port_range]
+        
+        data_hash["protocol"]["wan"] = {}
+        if hash[:wan_ip] == "所有IP"
+          data_hash["protocol"]["wan"]["wan_ip"] = "all_ip"
+          data_hash["protocol"]["wan"]["all_ip"] = true
+          data_hash["protocol"]["wan"]["specified_ip"]["enable"] = false
+        elsif hash[:wan_ip] == "指定IP范围"
+          data_hash["protocol"]["wan"]["wan_ip"] = "specified_ip"
+          data_hash["protocol"]["wan"]["all_ip"] = false
+          data_hash["protocol"]["wan"]["specified_ip"]["enable"] = true
+        end
+        if hash[:wan_port] == "所有端口"
+          data_hash["protocol"]["wan"]["wan_port"] = "all_port"
+          data_hash["protocol"]["wan"]["all_port"] = true
+          data_hash["protocol"]["wan"]["specified_ip"]["enable"] = false
+        elsif hash[:wan_port] == "指定端口范围"
+          data_hash["protocol"]["wan"]["wan_port"] = "specified_port"
+          data_hash["protocol"]["wan"]["all_port"] = false
+          data_hash["protocol"]["wan"]["specified_port"]["enable"] = true
+        end
+        data_hash["protocol"]["wan"]["specified_ip"]["ip_range"] = hash[:wan_ip_range]
+        data_hash["protocol"]["wan"]["specified_port"]["port_range"] = hash[:wan_port_range]
+
+        data_hash["line"] = {"target_line" => hash[:target_line], "bridge_list" => nil}
+        return data_hash
+      end
+    end
+  end
+end

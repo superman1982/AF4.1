@@ -1,0 +1,843 @@
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS07-041)Microsoft Internet Information Server 5.1 DLL Request Remote Code Execution Vulnerability"; flow:established,to_server; content:"/_vti_bin/.dll/"; http_uri; nocase; pcre:"/\/_vti_bin\/\.dll\/([\x01-\x1f]|\x3f|\x22|\x2a|\x3a|<|>)[\\\/]~[0-9]/iU"; reference:bugtraq,15921; reference:cve,2005-4360; reference:ms07-041; holetype-id:102; ruletype:1; sid:12064;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS06-017)Microsoft FrontPage Server Extensions Cross-Site Scripting Vulnerability"; flow:to_server,established; content:"_vti_bin/_vti_adm/fpadmdll.dll"; http_uri; nocase; content:"operation=--"; nocase; reference:bugtraq,17452; reference:cve,2006-0015; reference:ms06-017; holetype-id:102; ruletype:1; sid:7027;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS06-017)Microsoft FrontPage Server Extensions Cross-Site Scripting Vulnerability"; flow:to_server,established; content:"_vti_bin/_vti_adm/fpadmdll.dll"; http_uri; nocase; content:"command=--"; nocase; reference:bugtraq,17452; reference:cve,2006-0015; reference:ms06-017; holetype-id:102; ruletype:1; sid:7028;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS06-017)Microsoft FrontPage Server Extensions Cross-Site Scripting Vulnerability"; flow:to_server,established; content:"_vti_bin/_vti_adm/fpadmdll.dll"; http_uri; nocase; content:"name=--"; nocase; reference:bugtraq,17452; reference:cve,2006-0015; reference:ms06-017; holetype-id:102; ruletype:1; sid:7029;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-086)Microsoft IIS Executable File Parsing Vulnerability"; flow:established,to_server; content:".cmd|22|"; http_uri; nocase; pcre:"/\.cmd\x22(\+|\s)*(\x22)*(\x26|\x2e)/siU"; reference:bugtraq,1912; reference:cve,2000-0886; reference:ms00-086; holetype-id:102; ruletype:1; sid:3193;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-086)Microsoft IIS Executable File Parsing Vulnerability"; flow:established,to_server; content:".bat|22|"; http_uri; nocase; pcre:"/\.bat\x22(\+|\s)*(\x22)*(\x26|\x2e)/siU"; reference:bugtraq,1912; reference:cve,2000-0886; reference:ms00-086; holetype-id:102; ruletype:1; sid:3194;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft Windows 2000 Resource Kit W3Who.DLL Multiple Remote Vulnerabilities"; flow:to_server,established; content:"/w3who.dll?"; http_uri; nocase; pcre:"/w3who\.dll\x3f[^\r\n]{519}/iU"; reference:bugtraq,11820; reference:cve,2004-1134; holetype-id:102; ruletype:1; sid:3087;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS02-030)Microsoft SQL Server SQLXML Buffer Overflow Vulnerability"; flow:to_server,established; content:"contenttype="; http_uri; nocase; pcre:"/\.x[sm]l[^\r\n]+contenttype=[^\r\n\x3b]{240,}/smiU"; reference:bugtraq,5004; reference:cve,2002-0186; reference:ms02-030; holetype-id:102; ruletype:1; sid:3150;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS03-007)Microsoft Windows ntdll.dll Buffer Overflow Vulnerability"; flow:to_server,established; content:"SEARCH /"; pcre:"/^SEARCH \x2f[^\x00\x3a\x26\x3f\x25\x23\x20\x0a\x0d\x2f\x2b\x0b\x5c]{284}/i"; reference:bugtraq,7116; reference:cve,2003-0109; reference:ms03-007; holetype-id:102; ruletype:1; sid:2091;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS09-020)Microsoft IIS Unicode Requests to WebDAV Multiple Authentication Bypass Vulnerabilities"; flow:to_server,established; content:"%c0%af"; http_raw_uri; pcre:"/^(GET|PUT|PROPFIND|PATH)[^\r\n]+%c0%af/i"; reference:bugtraq,34993; reference:cve,2009-1535; reference:ms09-020; holetype-id:102; ruletype:1; sid:17564;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS Malformed Local Filename Security Bypass Vulnerability"; flow:established,to_server; content:".asp|3B|"; fast_pattern; http_uri; nocase; pcre:"/\x2Easp\x3B[^\r\n:\/\\]*\.(jpg|jpeg|gif|bmp|png|tif|ico|txt)/iU"; reference:bugtraq,37640; reference:cve,2009-4444; holetype-id:102; ruletype:1; sid:16356;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS98-003)NT IIS ASP Alternate Data Streams Vulnerability"; flow:to_server,established; content:".asp|3A 3A 24|DATA"; fast_pattern; http_uri; nocase; reference:bugtraq,149; reference:cve,1999-0278; reference:ms98-003; holetype-id:102; ruletype:1; sid:975;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS99-025)NT IIS MDAC RDS Vulnerability"; flow:to_server,established; content:"/msadcs.dll"; fast_pattern; http_uri; nocase; reference:bugtraq,529; reference:cve,1999-1011; reference:ms98-004; reference:ms99-025; holetype-id:102; ruletype:1; sid:1023;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"NewsPro 1.01 Unauthenticated Administrator Vulnerability"; flow:to_server,established; content:"logged,true"; http_cookie; nocase; reference:bugtraq,4672; reference:cve,2002-1734; holetype-id:102; ruletype:1; sid:1756;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"IIS WebDav Lock Method Memory Leak DoS Vulnerability"; flow:to_server,established; content:"LOCK "; depth:5; reference:bugtraq,2736; holetype-id:102; ruletype:1; sid:969;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-006)MS Index Server %20 ASP Source Disclosure Vulnerability"; flow:to_server,established; content:"&CiRestriction=none"; http_uri; nocase; content:"&CiHiliteType=Full"; http_uri; nocase; pcre:"/CiWebHitsFile=[^\r\n]+\x20/iU"; reference:bugtraq,1084; reference:cve,2000-0302; reference:ms00-006; holetype-id:102; ruletype:1; sid:978;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-006)NT Index Server Directory Traversal Vulnerability"; flow:to_server,established; content:".htw"; http_uri; nocase;content:"CiWebHitsFile"; http_uri; nocase;reference:bugtraq,950; reference:cve,2000-0097; reference:ms00-006; holetype-id:102; ruletype:1; sid:1044;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS 4.0 IISADMPWD Proxy Password Attack"; flow:to_server,established; content:"/iisadmpwd/"; http_uri; nocase; fast_pattern; pcre:"/\/iisadmpwd\/[^\/\r\n]+\.htr/iU"; reference:bugtraq,2110; reference:cve,1999-0407; holetype-id:102; ruletype:1; sid:1018;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS 3.0/4.0 Upgrade BDIR.HTR Vulnerability"; flow:to_server,established; content:"/bdir.htr??"; http_uri; nocase; fast_pattern; reference:bugtraq,2280; holetype-id:102; ruletype:1; sid:1000;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-031)Microsoft IIS 4.0/5.0 Malformed Filename Request Vulnerability"; flow:to_server,established; content:" .htr"; http_uri; nocase; fast_pattern; pcre:"/[\t ]{230,}\.htr/iU"; reference:bugtraq,1193; reference:cve,2000-0457; reference:ms00-031; holetype-id:102; ruletype:1; sid:1021;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-044)Microsoft IIS 4.0/5.0 Source Fragment Disclosure Vulnerability"; flow:to_server,established; content:"+.htr"; http_raw_uri; nocase; reference:bugtraq,1488; reference:cve,2000-0630; reference:ms00-044; holetype-id:102; ruletype:1; sid:987;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS03-022)Microsoft Windows Media Services NSIISlog.DLL Remote Buffer Overflow Vulnerability"; flow:to_server,established; content:"/nsiislog.dll"; http_uri; nocase; fast_pattern; reference:bugtraq,8035; reference:cve,2003-0227; reference:ms03-022; holetype-id:102; ruletype:1; sid:2129;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"NT Site Server AdSamples Vulnerability"; flow:to_server,established; content:"/adsamples/config/site.csc"; http_uri; nocase; http_uri; fast_pattern; reference:bugtraq,256; reference:cve,1999-1520; holetype-id:102; ruletype:1; sid:1038;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"IIS 4.0 fpcount.exe Buffer Overflow Vulnerability"; flow:to_server,established; content:"/fpcount.exe"; http_uri; nocase; fast_pattern; reference:bugtraq,2252; reference:cve,1999-1376; holetype-id:102; ruletype:1; sid:1013;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"AskSam Web Publisher Cross Site Scripting Vulnerability"; flow:to_server,established; content:"/as_web.exe"; http_uri; nocase; fast_pattern; reference:bugtraq,4670; holetype-id:102; ruletype:1; sid:1753;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"NT IIS4 Remote Web-Based Administration Vulnerability"; flow:to_server,established; content:"/iisadmin/ism.dll"; http_uri; nocase; fast_pattern; reference:bugtraq,189; reference:cve,1999-1538; holetype-id:102; ruletype:1; sid:993;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS01-047)Microsoft Exchange OWA Global Address List Disclosure Vulnerability"; flow:to_server,established; content:"/fumsg.asp"; http_uri; nocase; fast_pattern; reference:bugtraq,3301; reference:cve,2001-0660; reference:ms01-047; holetype-id:102; ruletype:1; sid:1568;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS99-013)NT IIS Showcode ASP Vulnerability"; flow:to_server,established; content:"/viewcode.asp"; http_uri; nocase; fast_pattern; reference:bugtraq,167; reference:cve,1999-0736; reference:ms99-013; holetype-id:102; ruletype:1; sid:1043;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS99-030)Microsoft JET Database Engine VBA Vulnerability"; flow:to_server,established; content:"/advworks/equipment/catalog_type.asp"; http_uri; nocase; fast_pattern; pcre:"/\/AdvWorks\/equipment\/catalog_type\.asp\?[^\r\n]+\|[^\r\n]+\|/iU"; reference:bugtraq,286; reference:cve,1999-0874; reference:ms99-030; holetype-id:102; ruletype:1; sid:1022;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS01-023)Microsoft IIS 5.0 .printer ISAPI Extension Buffer Overflow Vulnerability"; flow:to_server,established; content:".printer"; nocase; fast_pattern; pcre:"/Host:[^\r\n]{306,}/i"; reference:bugtraq,2674; reference:cve,2001-0241; reference:ms01-023; holetype-id:102; ruletype:1; sid:971;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-028)MS Frontpage htimage.exe Path Leak Vulnerability"; flow:to_server,established; content:"/htimage.exe"; http_uri; nocase; fast_pattern; reference:bugtraq,964; reference:cve,2000-0122; reference:ms00-028; holetype-id:102; ruletype:1; sid:1595;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-060)Microsoft FrontPage/IIS Cross Site Scripting shtml.dll Vulnerability"; flow:to_server,established; content:"/_vti_bin/shtml.dll"; http_uri; nocase; fast_pattern; pcre:"/\/_vti_bin\/shtml\.dll[^\r\n]*<script>[^\r\n]*<\/script>/iU"; reference:bugtraq,1594; reference:bugtraq,1595; reference:cve,2000-0746; reference:cve,2000-1104; reference:ms00-060; holetype-id:102; ruletype:1; sid:1380;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Ecometry SGDynamo Cross-Site Scripting Vulnerability"; flow:to_server,established; content:"/sgdynamo.exe"; http_uri; nocase; fast_pattern; pcre:"/\/sgdynamo.exe\?HTNAME=<script>[^\r\n]*<\/script>/iU"; reference:bugtraq,4720; reference:cve,2002-0375; holetype-id:102; ruletype:1; sid:2326;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS 5.1 Frontpage Extensions Path Disclosure Information Vulnerability"; flow:to_server,established; content:"/_vti_pvt/"; http_uri; nocase; content:".cnf"; http_uri; nocase; reference:bugtraq,4078; reference:cve,2002-1717; holetype-id:102; ruletype:1; sid:977;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-094)Microsoft PhoneBook Server Buffer Overflow"; flow:to_server,established; content:"/pbserver/pbserver.dll"; http_uri; nocase; fast_pattern; reference:cve,2000-1089; reference:ms00-094; holetype-id:102; ruletype:1; sid:1772;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft Windows 2000 Resource Kit W3Who.DLL Multiple Remote Vulnerabilities"; flow:to_server,established; content:"/w3who.dll?"; http_uri; nocase; pcre:"/w3who\.dll\x3f[^\r\n]*<script>[^\r\n]*<\/script>/iU"; reference:bugtraq,11820; reference:cve,2004-1134; holetype-id:102; ruletype:1; sid:11020001;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS Malformed Local Filename Security Bypass Vulnerability"; flow:established,to_server; content:".cer|3B|"; fast_pattern; http_uri; nocase; pcre:"/\x2Ecer\x3B[^\r\n]*\.(jpg|jpeg|gif|bmp|png|tif|ico|txt)/iU"; reference:bugtraq,37640; reference:cve,2009-4444; holetype-id:102; ruletype:1; sid:11020002;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS Malformed Local Filename Security Bypass Vulnerability"; flow:established,to_server; content:".asa|3B|"; fast_pattern; http_uri; nocase; pcre:"/\x2Easa\x3B[^\r\n]*\.(jpg|jpeg|gif|bmp|png|tif|ico|txt)/iU"; reference:bugtraq,37640; reference:cve,2009-4444; holetype-id:102; ruletype:1; sid:11020003;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS04-030)Microsoft XML Parser Remote Denial of Service Vulnerability"; flow:established,to_server; content:"PROPFIND"; depth:8; nocase; pcre:"/(xmlns\x3A[^\s]+\s){15}/i"; reference:bugtraq,11384; reference:cve,2003-0718; reference:ms04-030; holetype-id:102; ruletype:1; sid:12043;)
+
+alert tcp any any -> any 9060 (msg:"IBM WebSphere Application Server Administrative Console Cross Site Scripting Vulnerability"; flow:to_server, established; content:"/ibm/console/"; http_uri; nocase; content:"script"; http_uri; nocase; reference:bugtraq,34001; reference:cve,2009-0855; holetype-id:102; ruletype:1; sid:16686;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Datasource Username Vulnerability"; flow:to_server,established; content:"CF_SETDATASOURCEUSERNAME"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:909;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Getodbcdsn Access"; flow:to_server,established; content:"CFUSION_GETODBCDSN"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:916;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION DB Connections Flush Vulnerability"; flow:to_server,established; content:"CFUSION_DBCONNECTIONS_FLUSH"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:917;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Datasource Password Vulnerability"; flow:to_server,established; content:"CF_SETDATASOURCEPASSWORD"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:919;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Datasource Vulnerability"; flow:to_server,established; content:"CF_ISCOLDFUSIONDATASOURCE"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:920;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Admin Encrypt Vulnerability"; flow:to_server,established; content:"CFUSION_ENCRYPT"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:921;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Getodbcin Vulnerability"; flow:to_server,established; content:"CFUSION_GETODBCINI"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:923;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Admin Decrypt Vulnerability"; flow:to_server,established; content:"CFUSION_DECRYPT"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:924;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Set Odbc Ini Vulnerability"; flow:to_server,established; content:"CFUSION_SETODBCINI"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:926;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Settings Refresh Vulnerability"; flow:to_server,established; content:"CFUSION_SETTINGS_REFRESH"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:927;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION CFUSION_VERIFYMAIL Access"; flow:to_server,established; content:"CFUSION_VERIFYMAIL"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:929;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION CFNEWINTERNALREGISTRY Access"; flow:to_server,established; content:"CFNEWINTERNALREGISTRY"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:8486;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION CFADMIN_REGISTRY_DELETE Access"; flow:to_server,established; content:"CFADMIN_REGISTRY_DELETE"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:8489;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION CFADMIN_REGISTRY_SET Access"; flow:to_server,established; content:"CFADMIN_REGISTRY_SET"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:8487;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION CFNEWINTERNALADMINSECURITY Access"; flow:to_server,established; content:"CFNEWINTERNALADMINSECURITY"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:8485;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION CFADMIN_REGISTRY_GET Access"; flow:to_server,established; content:"CFADMIN_REGISTRY_GET"; fast_pattern:only; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:8488;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Exampleapp Access"; flow:to_server,established; content:"/cfdocs/exampleapp/"; fast_pattern; nocase; http_uri; reference:cve,2001-0535; holetype-id:102; ruletype:1; sid:928;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Mode=debug Vulnerability"; flow:to_server,established; content:"Mode=debug"; fast_pattern; nocase; http_uri; reference:cve,1999-0760; reference:nessus,10797; holetype-id:102; ruletype:1; sid:1540;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Beaninfo Access"; flow:to_server,established; content:"/cfdocs/examples/cvbeans/beaninfo.cfm"; fast_pattern; nocase; http_uri; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:914;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Expeval Access"; flow:to_server,established; content:"/cfdocs/expeval/"; fast_pattern; nocase; http_uri; reference:bugtraq,115; reference:cve,1999-0477; holetype-id:102; ruletype:1; sid:918;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Snippets Vulnerability"; flow:to_server,established; content:"/cfdocs/snippets/"; fast_pattern; nocase; http_uri; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:930;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Parks Access"; flow:to_server,established; content:"/cfdocs/examples/parks/detail.cfm"; fast_pattern; nocase; http_uri; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:912;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Application.cfm Access"; flow:to_server,established; content:"/application.cfm"; fast_pattern; nocase; http_uri; reference:arachnids,268; reference:bugtraq,550; reference:cve,1999-0760; reference:cve,2000-0189; holetype-id:102; ruletype:1; sid:932;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Mainframeset Access"; flow:to_server,established; content:"/cfdocs/examples/mainframeset.cfm"; fast_pattern; nocase; http_uri; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:925;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Startstop DOS Access"; flow:to_server,established; content:"/cfide/administrator/startstop.html"; fast_pattern; nocase; http_uri; reference:cve,1999-0756; holetype-id:102; ruletype:1; sid:935;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Sendmail.cfm Access"; flow:to_server,established; content:"/sendmail.cfm"; fast_pattern; nocase; http_uri; reference:cve,2001-0535; holetype-id:102; ruletype:1; sid:1659;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Cfappman Access"; flow:to_server,established; content:"/cfappman/index.cfm"; fast_pattern; nocase; http_uri; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:913;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Administrator Access"; flow:to_server,established; content:"/cfide/administrator/index.cfm"; fast_pattern; nocase; http_uri; reference:bugtraq,1314; reference:cve,2000-0538; reference:nessus,10581; holetype-id:102; ruletype:1; sid:908;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Cfcache.map Access"; flow:to_server,established; content:"/cfcache.map"; http_uri; fast_pattern; nocase;  reference:bugtraq,917; reference:cve,2000-0057; holetype-id:102; ruletype:1; sid:903;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Cfmlsyntaxcheck.cfm Access"; flow:to_server,established; content:"/cfdocs/cfmlsyntaxcheck.cfm"; fast_pattern; nocase; http_uri; reference:bugtraq,550; reference:cve,1999-0760; holetype-id:102; ruletype:1; sid:931;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-COLDFUSION Onrequestend.cfm Access"; flow:to_server,established; content:"/onrequestend.cfm"; fast_pattern; nocase; http_uri; reference:arachnids,269; reference:bugtraq,550; reference:cve,1999-0760; reference:cve,2000-0189; holetype-id:102; ruletype:1; sid:933;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Newline Exploit Vulnerability"; flow:to_server,established; content:"|0D 0A 0D 0A 0D 0A 0D 0A|"; pcre:"/(\x0d\x0a){100}/";  reference:bugtraq,7254; reference:cve,2003-0132; holetype-id:102; ruletype:1; sid:11272;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Tomcat WebDAV System Tag Remote File Disclosure Vulnerability"; flow:to_server,established; content:"<!ENTITY RemoteX SYSTEM"; nocase; reference:bugtraq,26070; reference:cve,2007-5461; reference:url,issues.apache.org/jira/browse/GERONIMO-3549; holetype-id:102; ruletype:1; sid:12711;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sharepoint Cross Site Scripting Vulnerability"; flow:to_server,established; content:"/sharepoint/"; http_uri; pcre:"/sharepoint[^\n]*\x22[\t ]*\x29\s*\x3b/Ui";  reference:bugtraq,23832; reference:cve,2007-2581; reference:url,www.microsoft.com/technet/security/bulletin/ms07-059.mspx; holetype-id:102; ruletype:1; sid:12629;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache 413 Error HTTP Request Method Cross-site Scripting Attack"; flow:established,to_server; content:"<PROCHECKUP>"; depth:12; nocase;  reference:bugtraq,26663; reference:cve,2007-6203; holetype-id:102; ruletype:1; sid:16611;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sun ONE Web Server JSP Source Code Disclosure Vulnerability"; flow:to_server,established; content:".jsp|3A 3A 24|DATA"; nocase; http_uri;   reference:cve,2009-2445; holetype-id:102; ruletype:1; sid:16682;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache HTTP Server Mod_rewrite Module LDAP Scheme Handling Buffer Overflow Vulnerability"; flow:to_server,established; content:"/ldap:/"; nocase; http_uri; pcre:"/\x3F[^\x3F]*\x3F[^\x3F]*\x3F[^\x3F]*\x3F[^\x3F]*\x3F/U";  reference:cve,2006-3747; holetype-id:102; ruletype:1; sid:17656;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS Source Code Disclosure Vulnerability"; flow:to_server,established; content:"http://localhost"; nocase; http_raw_uri; pcre:"/[^=]\x20*http\x3A\/\/localhost/i"; reference:cve,2005-2678; reference:url,secunia.com/advisories/16548; holetype-id:102; ruletype:1; sid:17652;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sun Java Web Server Webdav Stack Buffer Overflow Vulnerability"; flow:to_server,established; content:"COPY"; depth:4; nocase; isdataat:200,relative; pcre:"/^COPY[\t ][^\n]{200}/smi"; reference:bugtraq,37874; reference:cve,2010-0361; holetype-id:102; ruletype:1; sid:17609;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Struts Information Disclosure Vulnerability"; flow:to_server,established; content:"/struts/"; nocase; http_raw_uri; content:"|25|252f"; distance:0; nocase; http_raw_uri;  reference:bugtraq,32104; reference:cve,2008-6505; holetype-id:102; ruletype:1; sid:17533;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"RSA Authentication Agent For Web Redirect Buffer Overflow Vulnerability"; flow:to_server,established; content:"IISWebAgent"; nocase; http_uri; content:"Redirect"; nocase; http_uri; content:"url|3D|"; nocase; http_uri; pcre:"/IISWebAgent[^\r\n]*\x2edll\x3F[^\r\n]*url\x3d[^\r\n]{257}/Ui";  reference:bugtraq,26424; reference:cve,2005-4734; holetype-id:102; ruletype:1; sid:17440;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Free Download Manager Remote Control Server HTTP Auth Header Buffer Overflow Vulnerability"; flow:to_server,established;content:"Authorization|3A| Basic"; nocase; pcre:"/Authorization\x3A Basic[\t ]+[A-Za-z0-9+=/]{1013}/i";  reference:bugtraq,33554; reference:cve,2009-0183; holetype-id:102; ruletype:1; sid:17536;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Tomcat AllowLinking URIencoding Directory Traversal Vulnerability"; flow:to_server,established; content:"|2F 25|c0|25|ae|25|c0|25|ae|2F|"; http_raw_uri; reference:bugtraq,30633; reference:cve,2008-2938; holetype-id:102; ruletype:1; sid:17387;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sun Java System Web Server 7.0 WebDAV Format String Exploit Vulnerability"; flow:to_server,established; content:"LOCK"; fast_pattern; nocase; distance:0; content:"encoding"; pcre:"/\<\?xml[^\>]+encoding\s*\=\s*(\'|\")[^\'\"\>\%]*\%[A-Za-z]/";  reference:bugtraq,37910; reference:cve,2010-0388; holetype-id:102; ruletype:1;  sid:16427; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sun Java System Web Server 7.0 WebDAV Format String Exploit Vulnerability"; flow:to_server,established; content:"PROPFIND"; nocase;  distance:0; content:"encoding"; pcre:"/\<\?xml[^\>]+encoding\s*\=\s*(\'|\")[^\'\"\>\%]*\%[A-Za-z]/";  reference:bugtraq,37910; reference:cve,2010-0388;  holetype-id:102; ruletype:1; sid:16426; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"ServletManager Access"; flow:to_server,established; content:"/servlet/ServletManager"; nocase; http_uri;  reference:bugtraq,3697; reference:cve,2001-1195; reference:nessus,12122; holetype-id:102; ruletype:1;  sid:2447; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Setinfo.hts Access"; flow:to_server,established; content:"/setinfo.hts"; nocase; http_uri;  reference:bugtraq,9972; reference:cve,2004-1857; reference:nessus,12120; holetype-id:102; ruletype:1;  sid:2448; )
+
+alert tcp any any -> any 2082,$HTTP_PORTS (msg:"Cpanel Resetpass Access"; flow:to_server,established; content:"/resetpass/?user="; nocase; http_uri; reference:bugtraq,9848; reference:cve,2004-1769; holetype-id:102; ruletype:1;  sid:2569; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sresult.exe Access"; flow:to_server,established; content:"/sresult.exe"; nocase; http_uri;  reference:bugtraq,10837; reference:nessus,14186; holetype-id:102; ruletype:1;  sid:2672; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sambar /search/results.stm Access"; flow:to_server,established;  content:"/search/results.stm"; nocase;  http_uri; pcre:"/query=[^\x00\x0a\x0d]{129}/iU"; reference:bugtraq,7975; reference:bugtraq,9607; reference:cve,2004-2086; reference:nessus,18650; holetype-id:102; ruletype:1;  sid:3629; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Encoded Cross Site Scripting Html Image Tag Set To Javascript Vulnerability"; flow:to_server,established; content:"src=javascript"; nocase; http_uri; pcre:"/\x3Cimg[\t ]*src=javascript/iU"; reference:bugtraq,4858; reference:cve,2002-0902; holetype-id:102; ruletype:1;  sid:7071; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Newsscript.pl Admin Vulnerability"; flow:to_server,established; content:"/newsscript.pl"; nocase; http_uri; content:"mode=admin"; nocase; http_uri;  reference:bugtraq,12761; reference:cve,2005-0735; reference:nessus,17309; holetype-id:102; ruletype:1;  sid:3676; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Badblue Ext.dll Buffer Overflow Vulnerability"; flow:to_server,established; content:"ext.dll"; http_uri; content:"mfcisapicommand="; http_uri; nocase; pcre:"/mfcisapicommand=[^\x00\x3a\x26\x3f\x25\x23\x20\x0a\x0d\x2f\x2b\x0b\x5c]{493}/Ui"; reference:bugtraq,12673; reference:cve,2005-0595; holetype-id:102; ruletype:1;  sid:3816; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"OReilly WebSite webfind.exe Buffer Overflow Vulnerability"; flow:to_server,established; content:"/webfind.exe"; nocase; http_uri; reference:bugtraq,1487; reference:cve,2000-0622; holetype-id:102; ruletype:1; sid:1849;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEBactive HTTP Server Default Log Vulnerability"; flow:to_server,established; content:"/active.log"; nocase; http_uri; reference:bugtraq,1497; reference:cve,2000-0642; holetype-id:102; ruletype:1; sid:1851;)
+
+alert tcp any any -> any 8181 (msg:"Cisco PIX Firewall Manager File Exposure Vulnerability"; flow:to_server,established; content:"/pixfir~1/how_to_login.html"; nocase; http_uri; reference:bugtraq,691; reference:cve,1999-0158; holetype-id:102; ruletype:1; sid:1858;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Pacific Software Carello File Duplication and Source Disclosure Vulnerability"; flow:to_server,established; content:"/Carello/add.exe"; nocase; http_uri; reference:bugtraq,1245; reference:cve,2000-0396; holetype-id:102; ruletype:1; sid:1943;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"ION Script Remote File Disclosure Vulnerability"; flow:to_server,established; content:"/ion-p"; nocase; http_uri; pcre:"/ion-p(\.exe)?\?page=([a-z]:|..)/iU"; reference:bugtraq,6091; reference:cve,2002-1559; holetype-id:102; ruletype:1; sid:1969;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Solaris AnswerBook2 Administration Interface Access Vulnerability"; flow:to_server,established; content:"/cgi-bin/admin/admin?command"; nocase; http_uri; reference:bugtraq,1554; reference:cve,2000-0696; holetype-id:102; ruletype:1; sid:1946;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC answerbook2 arbitrary command execution attempt"; flow:to_server,established; content:"/ab2/"; nocase; http_uri; pcre:"/\/ab2\/.{1}\x3B/Uis"; reference:bugtraq,1556; reference:cve,2000-0697; holetype-id:102; ruletype:1; sid:1947;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Novell NetWare HTTP Post Arbitrary Perl Code Execution Vulnerability"; flow:to_server,established; content:"POST"; depth:4; content:"/perl/"; http_uri; reference:bugtraq,5520; reference:cve,2002-1436; holetype-id:102; ruletype:1; sid:1979;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"IBM Websphere Caching Proxy Denial Of Service Vulnerability"; flow:to_server,established; content:"/helpout.exe"; http_uri; reference:bugtraq,6002; reference:cve,2002-1169; holetype-id:102; ruletype:1; sid:2057;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Tomcat Null Byte Directory/File Disclosure Vulnerability"; flow:to_server,established; content:"|00|.jsp"; http_uri; reference:bugtraq,6721; reference:cve,2003-0042; holetype-id:102; ruletype:1; sid:2061;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Spytech SpyAnywhere Unauthorized Administrator Access Vulnerability"; flow:to_server,established; content:"/chip.ini"; http_uri; reference:bugtraq,2755; reference:bugtraq,2775; reference:cve,2001-0749; reference:cve,2001-0771; holetype-id:102; ruletype:1; sid:2069;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"CSM Alibaba Web Server Piped Command Vulnerability"; flow:to_server,established; content:"/post32.exe"; http_uri; reference:bugtraq,1485; holetype-id:102; ruletype:1; sid:2071;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Bugzilla Sensitive Information Disclosure Vulnerability"; flow:to_server,established; content:"/globals.pl"; http_uri; reference:bugtraq,2671; reference:cve,2001-0330; holetype-id:102; ruletype:1; sid:2073;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Philboard philboard_admin.ASP Authentication Bypass Vulnerability"; flow:to_server,established; content:"/philboard_admin.asp"; http_uri; nocase; content:"philboard_admin=True"; http_cookie; reference:bugtraq,7739; holetype-id:102; ruletype:1; sid:2136;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Web-ERP Configuration File Remote Access Vulnerability"; flow:to_server,established; content:"/logicworks.ini"; http_uri; reference:bugtraq,6996; holetype-id:102; ruletype:1; sid:2138;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Weblogic SSIServlet Show Code Vulnerability"; flow:to_server,established; content:"/*.shtml"; http_uri; reference:bugtraq,1517; reference:cve,2000-0683; holetype-id:102; ruletype:1; sid:2139;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Trend Micro InterScan eManager Buffer Overflow Vulnerability"; flow:to_server,established; content:"/register.dll"; nocase; http_uri; metadata:service http; reference:bugtraq,3327; reference:cve,2001-0958; holetype-id:102; ruletype:1; sid:2231;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Trend Micro InterScan eManager Buffer Overflow Vulnerability"; flow:to_server,established; content:"/ContentFilter.dll"; nocase; http_uri; metadata:service http; reference:bugtraq,3327; reference:cve,2001-0958; holetype-id:102; ruletype:1; sid:2232;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Trend Micro InterScan eManager Buffer Overflow Vulnerability"; flow:to_server,established; content:"/SFNofitication.dll"; nocase; http_uri; metadata:service http; reference:bugtraq,3327; reference:cve,2001-0958; holetype-id:102; ruletype:1; sid:2233;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Trend Micro InterScan eManager Buffer Overflow Vulnerability"; flow:to_server,established; content:"/TOP10.dll"; nocase; http_uri; metadata:service http; reference:bugtraq,3327; reference:cve,2001-0958; holetype-id:102; ruletype:1; sid:2234;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Trend Micro InterScan eManager Buffer Overflow Vulnerability"; flow:to_server,established; content:"/SpamExcp.dll"; nocase; http_uri; metadata:service http; reference:bugtraq,3327; reference:cve,2001-0958; holetype-id:102; ruletype:1; sid:2235;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Trend Micro InterScan eManager Buffer Overflow Vulnerability"; flow:to_server,established; content:"/spamrule.dll"; nocase; http_uri; metadata:service http; reference:bugtraq,3327; reference:cve,2001-0958; holetype-id:102; ruletype:1; sid:2236;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Trend Micro OfficeScan Arbitrary File Disclosure Vulnerability"; flow:to_server,established; content:"/cgiWebupdate.exe"; nocase; http_uri; metadata:service http; reference:bugtraq,3216; reference:cve,2001-1150; holetype-id:102; ruletype:1; sid:2237;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Weblogic FileServlet Show Code Vulnerability"; flow:to_server,established; content:"/ConsoleHelp/"; nocase; http_uri; content:".jsp"; nocase; http_uri; reference:bugtraq,1518; reference:cve,2000-0682; holetype-id:102; ruletype:1; sid:2238;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PDGSoft Shopping Cart Multiple Buffer Overflow Vulnerability"; flow:to_server,established; content:"/redirect.exe"; nocase; http_uri; reference:bugtraq,1256; reference:cve,2000-0401; holetype-id:102; ruletype:1; sid:2239;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PDGSoft Shopping Cart Multiple Buffer Overflow Vulnerability"; flow:to_server,established; content:"/changepw.exe"; nocase; http_uri; reference:bugtraq,1256; reference:cve,2000-0401; holetype-id:102; ruletype:1; sid:2240;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Netwin CWMail Buffer Overflow Vulnerability"; flow:to_server,established; content:"/cwmail.exe"; nocase; http_uri; reference:bugtraq,4093; reference:cve,2002-0273; holetype-id:102; ruletype:1; sid:2241;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Mobius DocumentDirect For The Internet 1.2 Buffer Overflow Vulnerability"; flow:to_server,established; content:"/ddicgi.exe"; nocase; http_uri; reference:bugtraq,1657; reference:cve,2000-0826; holetype-id:102; ruletype:1; sid:2242;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sun NetDynamics Session ID Hijacking Vulnerability"; flow:to_server,established; content:"/ndcgi.exe"; nocase; http_uri; reference:bugtraq,3583; reference:cve,2001-0922; holetype-id:102; ruletype:1; sid:2243;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Lucent VitalNet Password Authentication Bypass Vulnerability"; flow:to_server,established; content:"/VsSetCookie.exe"; nocase; http_uri; reference:bugtraq,3784; reference:cve,2002-0236; holetype-id:102; ruletype:1; sid:2244;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"NetWin WebNEWS Remote Buffer Overflow Vulnerability"; flow:to_server,established; content:"/Webnews.exe"; nocase; http_uri; reference:bugtraq,4124; reference:cve,2002-0290; holetype-id:102; ruletype:1; sid:2245;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PeopleSoft PeopleBooks psdoccgi.exe Denial of Service Vulnerability"; flow:to_server,established; content:"/psdoccgi"; nocase; http_uri; reference:bugtraq,9037; reference:bugtraq,9038; reference:cve,2003-0626; reference:cve,2003-0627; holetype-id:102; ruletype:1; sid:2277;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"BulletScript MailList bsml.pl Information Disclosure Vulnerability"; flow:to_server,established; content:"/bsml.pl"; nocase; http_uri; reference:bugtraq,9311; holetype-id:102; ruletype:1; sid:2327;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"BRS WebWeaver ISAPISkeleton.dll Cross-Site Scripting Vulnerability"; flow:to_server,established; content:"/ISAPISkeleton.dll"; nocase; http_uri; reference:bugtraq,9516; holetype-id:102; ruletype:1; sid:2369;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"BugPort Unauthorized Configuration File Viewing Vulnerability"; flow:to_server,established; content:"/config.conf"; nocase; http_uri; metadata:service http; reference:bugtraq,9542; holetype-id:102; ruletype:1; sid:2370;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"BEA WebLogic InteractiveQuery.jsp Cross-Site Scripting Vulnerability"; flow:to_server,established; content:"/InteractiveQuery.jsp"; nocase; http_uri; reference:bugtraq,8938; reference:cve,2003-0624; holetype-id:102; ruletype:1; sid:2395;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"EditTag edittag.pl File Disclosure Vulnerability"; flow:to_server,established; content:"/edittag.pl"; nocase; http_uri; reference:bugtraq,6675; holetype-id:102; ruletype:1; sid:2400;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"CalaCode mail Webmail System Cross-Site Scripting Vulnerability"; flow:to_server,established; content:"/util.pl"; nocase; http_uri; reference:bugtraq,9748; holetype-id:102; ruletype:1; sid:2407;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Cisco IOS HTTP Configuration Attempt Vulnerability"; flow:to_server,established; content:"/level/"; http_uri; pcre:"/\x2flevel\x2f\d+\x2f(exec|configure)/im"; reference:bugtraq,2936; reference:cve,2001-0537; holetype-id:102; ruletype:1; sid:1250; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Enterprise DOS Vulnerability"; flow:to_server,established; content:"REVLOG / "; reference:bugtraq,2294; reference:cve,2001-0251; holetype-id:102; ruletype:1; sid:1047; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Webhits.exe Access Vulnerability"; flow:to_server,established; content:"/scripts/samples/search/webhits.exe"; nocase; http_uri; reference:bugtraq,950; reference:cve,2000-0097; holetype-id:102; ruletype:1; sid:1073; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS04-030)WEB-MISC WebDAV Propfind Access Vulnerability"; flow:to_server,established; content:"propfind"; nocase; pcre:"/<a\x3a\s*propfind\s*xmlns\x3a\s*a=\s*[\x21\x22]?DAV/ims"; reference:bugtraq,1656; reference:cve,2000-0869; reference:cve,2003-0718; reference:url,www.microsoft.com/technet/security/bulletin/MS04-030.mspx; holetype-id:102; ruletype:1; sid:1079;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Unify EWave ServletExec Upload Vulnerability"; flow:to_server,established; content:"/servlet/com.unify.servletexec.UploadServlet"; nocase; http_uri; reference:bugtraq,1868; reference:bugtraq,1876; reference:cve,2000-1024; reference:cve,2000-1025; reference:nessus,10570; holetype-id:102; ruletype:1; sid:1080;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Servers Suite DOS Vulnerability"; flow:to_server,established; content:"/dsgw/bin/search?context="; nocase; http_uri; reference:bugtraq,1868; reference:cve,2000-1025; holetype-id:102; ruletype:1; sid:1081; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Amazon 1-click Cookie Theft Vulnerability"; flow:to_server,established; content:"ref%3Cscript%20language%3D%22Javascript"; nocase; reference:bugtraq,1194; reference:cve,2000-0439; holetype-id:102; ruletype:1; sid:1082; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Unify EWave ServletExec DOS Vulnerability"; flow:to_server,established; content:"/servlet/ServletExec"; http_uri; reference:bugtraq,1868; reference:cve,2000-1025; holetype-id:102; ruletype:1; sid:1083; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Talentsoft Web+ Source Code View Access Vulnerability"; flow:to_server,established; content:"/webplus.exe?script=test.wml"; http_uri; reference:bugtraq,1722; holetype-id:102; ruletype:1; sid:1095; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Talentsoft Web+ Internal IP Address Access Vulnerability"; flow:to_server,established; content:"/webplus.exe?about"; http_uri; reference:bugtraq,1720; holetype-id:102; ruletype:1; sid:1096; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Admin Passwd Vulnerability"; flow:to_server,established; content:"/admin-serv/config/admpw"; nocase; http_uri; reference:bugtraq,1579; holetype-id:102; ruletype:1; sid:1103; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Tomcat Server Snoop Access Vulnerability"; flow:to_server,established; content:"/jsp/snp/"; http_uri; content:".snp"; http_uri; reference:bugtraq,1532; reference:cve,2000-0760; holetype-id:102; ruletype:1; sid:1108; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Apache Source.asp File Access Vulnerability"; flow:to_server,established; content:"/site/eg/source.asp"; nocase; http_uri; reference:bugtraq,1457; reference:cve,2000-0628; holetype-id:102; ruletype:1; sid:1110; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Tomcat Server Exploit Access Vulnerability"; flow:to_server,established; content:"/contextAdmin/contextAdmin.html"; nocase; http_uri; reference:bugtraq,1548; reference:cve,2000-0672; holetype-id:102; ruletype:1; sid:1111; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Domino Webadmin.nsf Access Vulnerability"; flow:to_server,established; content:"/webadmin.nsf"; nocase; http_uri; reference:bugtraq,9900; reference:bugtraq,9901; holetype-id:102; ruletype:1; sid:1579; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Ecommerce Checks.txt Access Vulnerability"; flow:to_server,established; content:"/orders/checks.txt"; nocase; http_uri; reference:bugtraq,2281; holetype-id:102; ruletype:1; sid:1155;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Apache Directory Disclosure Attempt Vulnerability"; flow:to_server,established; content:"////////"; http_raw_uri; pcre:"/^Get [^\r\n]+\/{7,}[^\r\n]+ HTTP\/\x31\x2e(0|1)\x0d\x0a/mi"; reference:bugtraq,2503; holetype-id:102; ruletype:1; sid:1156;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape PublishingXpert Access Vulnerability"; flow:to_server,established; content:"/PSUser/PSCOErrPage.htm"; nocase; http_uri; reference:cve,2000-1196; holetype-id:102; ruletype:1; sid:1157;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Enterprise Server Directory View Vulnerability"; flow:to_server,established; content:"?wp-verify-link"; nocase; http_uri; reference:bugtraq,1063; holetype-id:102; ruletype:1; sid:1177; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Cgitest.exe Access Vulnerability"; flow:to_server,established; content:"/cgitest.exe"; nocase; http_uri; reference:bugtraq,1313; reference:bugtraq,3885; reference:cve,2000-0521; reference:cve,2002-0128; holetype-id:102; ruletype:1; sid:1587; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Enterprise Server Directory View Vulnerability"; flow:to_server,established; content:"?wp-cs-dump"; nocase; http_uri; reference:bugtraq,1063; reference:cve,2000-0236; holetype-id:102; ruletype:1; sid:1183; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Enterprise Server Directory View Vulnerability"; flow:to_server,established; content:"?wp-ver-info"; nocase; http_uri; reference:bugtraq,1063; reference:cve,2000-0236; holetype-id:102; ruletype:1; sid:1184; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Enterprise Server Directory View Vulnerability"; flow:to_server,established; content:"?wp-ver-diff"; nocase; http_uri; reference:bugtraq,1063; reference:cve,2000-0236; holetype-id:102; ruletype:1; sid:1186; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC SalesLogix Eviewer Web Command Attempt Vulnerability"; flow:to_server,established; content:"/slxweb.dll/admin?command="; nocase; http_uri; reference:bugtraq,1078; reference:bugtraq,1089; reference:cve,2000-0278; reference:cve,2000-0289; holetype-id:102; ruletype:1; sid:1187; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Enterprise Server Directory View Vulnerability"; flow:to_server,established; content:"?wp-start-ver"; nocase; http_uri; reference:bugtraq,1063; reference:cve,2000-0236; holetype-id:102; ruletype:1; sid:1188; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Enterprise Server Directory View Vulnerability"; flow:to_server,established; content:"?wp-stop-ver"; nocase; http_uri; reference:bugtraq,1063; reference:cve,2000-0236; holetype-id:102; ruletype:1; sid:1189; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Enterprise Server Directory View Vulnerability"; flow:to_server,established; content:"?wp-uncheckout"; nocase; http_uri; reference:bugtraq,1063; reference:cve,2000-0236; holetype-id:102; ruletype:1; sid:1190; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Enterprise Server Directory View Vulnerability"; flow:to_server,established; content:"?wp-html-rend"; nocase; http_uri; reference:bugtraq,1063; reference:cve,2000-0236; holetype-id:102; ruletype:1; sid:1191; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Oracle Web Arbitrary Command Execution Attempt Vulnerability"; flow:to_server,established; content:"/ows-bin/"; nocase; http_uri; content:"?&"; http_uri; reference:bugtraq,1053; reference:cve,2000-0169; holetype-id:102; ruletype:1; sid:1193; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Netscape Enterprise Server Directory View Vulnerability"; flow:to_server,established; content:"?wp-usr-prop"; nocase; http_uri; reference:bugtraq,1063; reference:cve,2000-0236; holetype-id:102; ruletype:1; sid:1198; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Htgrep Attempt Vulnerability"; flow:to_server,established; content:"/htgrep"; http_uri; content:"hdr=/"; reference:cve,2000-0832; holetype-id:102; ruletype:1; sid:1615; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Muscat Empower Cgi Access Vulnerability"; flow:to_server,established; content:"/empower?DB"; nocase; http_uri; reference:bugtraq,2374; reference:cve,2001-0224; holetype-id:102; ruletype:1; sid:1221; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Sml3com Access Vulnerability"; flow:to_server,established; content:"/graphics/sml3com"; http_uri; reference:bugtraq,2721; reference:cve,2001-0740; holetype-id:102; ruletype:1; sid:1291; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Mod-plsql Administration Access Vulnerability"; flow:to_server,established; content:"/admin_/"; http_uri; reference:bugtraq,3726; reference:bugtraq,3727; reference:cve,2001-1216; reference:cve,2001-1217; holetype-id:102; ruletype:1; sid:1385; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC PCCS Mysql Database Admin Tool Access Vulnerability"; flow:to_server,established; content:"pccsmysqladm/incs/dbconnect.inc"; nocase; reference:bugtraq,1557; reference:cve,2000-0707; holetype-id:102; ruletype:1; sid:509; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Axis Storpoint CD Attempt Vulnerability"; flow:to_server,established; content:"/cd/../config/html/cnf_gi.htm"; http_raw_uri; reference:bugtraq,1025; reference:cve,2000-0191; holetype-id:102; ruletype:1; sid:1524; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Basilix Sendmail.inc Access Vulnerability"; flow:to_server,established; content:"/inc/sendmail.inc"; http_uri; reference:bugtraq,2198; reference:cve,2001-1044; holetype-id:102; ruletype:1; sid:1526; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Basilix Mysql.class Access Vulnerability"; flow:to_server,established; content:"/class/mysql.class"; http_uri; reference:bugtraq,2198; reference:cve,2001-1044; holetype-id:102; ruletype:1; sid:1527; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC BBoard Access Vulnerability"; flow:to_server,established; content:"/servlet/sunexamples.BBoardServlet"; http_uri; reference:bugtraq,1459; reference:cve,2000-0629; holetype-id:102; ruletype:1; sid:1528; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Cisco Catalyst Command Execution Attempt Vulnerability"; flow:to_server,established; content:"/exec/show/config/cr"; nocase; http_uri; reference:bugtraq,1846; reference:cve,2000-0945; holetype-id:102; ruletype:1; sid:1544; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Cvsweb Version Access Vulnerability"; flow:to_server,established; content:"/cvsweb/version"; http_uri; reference:cve,2000-0670; holetype-id:102; ruletype:1; sid:1552; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC /doc/packages Access Vulnerability"; flow:to_server,established; content:"/doc/packages"; nocase; http_uri; reference:bugtraq,1707; reference:cve,2000-1016; holetype-id:102; ruletype:1; sid:1559; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC SecureSite Authentication Bypass Attempt Vulnerability"; flow:to_server,established; content:"secure_site, ok"; nocase; reference:bugtraq,4621; holetype-id:102; ruletype:1; sid:1744; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC B2 Arbitrary Command Execution Attempt Vulnerability"; flow:to_server,established; content:"/b2/b2-include/"; http_uri; content:"b2inc"; http_uri; reference:bugtraq,4673; reference:cve,2002-0734; reference:cve,2002-1466; holetype-id:102; ruletype:1; sid:1757; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Search.dll Directory Listing Attempt Vulnerability"; flow:to_server,established; content:"/search.dll"; http_uri; content:"query="; http_uri; reference:bugtraq,1684; reference:cve,2000-0835; holetype-id:102; ruletype:1; sid:1766; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Apache Chunked-Encoding Worm Attempt Vulnerability"; flow:to_server,established; content:"CCCCCCC|3A| AAAAAAAAAAAAAAAAAAA"; nocase; reference:bugtraq,5033; reference:cve,2002-0392; holetype-id:102; ruletype:1; sid:1809; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC IBM Net.Commerce Orderdspc.d2w Access Vulnerability"; flow:established,to_server; content:"/ncommerce3/ExecMacro/orderdspc.d2w"; http_uri; reference:bugtraq,2350; reference:cve,2001-0319; holetype-id:102; ruletype:1; sid:1820; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Tomcat Servlet Mapping Cross Site Scripting Attempt Vulnerability"; flow:established,to_server; content:"/servlet/"; http_uri; content:"/org.apache."; http_uri; reference:bugtraq,5193; reference:cve,2002-0682; holetype-id:102; ruletype:1; sid:1827; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC IPlanet Search Directory Traversal Attempt Vulnerability"; flow:established,to_server; content:"/search"; http_uri; content:"NS-query-pat="; http_uri; content:"..|5C|..|5C|"; http_uri; reference:bugtraq,5191; reference:cve,2002-1042; holetype-id:102; ruletype:1; sid:1828; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Tomcat TroubleShooter Servlet Access Vulnerability"; flow:established,to_server; content:"/examples/servlet/TroubleShooter"; http_uri; reference:bugtraq,4575; holetype-id:102; ruletype:1; sid:1829; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Tomcat SnoopServlet Servlet Access Vulnerability"; flow:established,to_server; content:"/examples/servlet/SnoopServlet"; http_uri; reference:bugtraq,4575; holetype-id:102; ruletype:1; sid:1830; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Jigsaw Dos Attempt Vulnerability"; flow:established,to_server; content:"/servlet/con"; http_uri; content:"|2F|con|0d 0a|"; reference:bugtraq,5258; reference:cve,2002-1052; holetype-id:102; ruletype:1; sid:1831; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Macromedia SiteSpring Cross Site Scripting Attempt Vulnerability"; flow:established,to_server; content:"/error/500error.jsp"; nocase; http_uri; content:"et="; http_uri; content:"<script"; nocase; http_uri; reference:bugtraq,5249; reference:cve,2002-1027; holetype-id:102; ruletype:1; sid:1835; )
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WEB-MISC Mailman Cross Site Scripting Attempt Vulnerability"; flow:established,to_server; content:"/mailman/"; nocase; http_uri; content:"?"; http_uri; content:"info="; http_uri; content:"<script"; nocase; http_uri; reference:bugtraq,5298; reference:cve,2002-0855; holetype-id:102; ruletype:1; sid:1839; )
+
+alert tcp any any -> any any (msg:"Challenge Collapsar2.0(CC2.0) Attack"; flow:to_server,established; content:"|1A 27 40 00|"; pcre:"/\x1A\x27\x40\x00$/m"; holetype-id:102; ruletype:1; sid:11020006;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"MiniShare Server Remote Buffer Overflow Vulnerability"; flow:to_server,established; content:"get ";nocase;depth:4; pcre:"/get [^\n\r]{880}/is";reference:bugtraq,11620; reference:cve,2004-2271; holetype-id:102; ruletype:1; sid:11020007;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"HTTP Service Authentication Access"; flow:to_server,established; content:"Authorization: Negotiate"; ruletype:1; holetype-id:102; sid:11020009;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS03-018)Microsoft IIS WebDAV PROPFIND and SEARCH Method Denial of Service Vulnerability"; flow:to_server,established; content:"SEARCH /"; nocase; pcre:"/SEARCH \/[^\r\n]{1200,}/i"; reference:bugtraq,7735; reference:cve,2003-0226; reference:ms,03-018; holetype-id:102; ruletype:1; sid:11020010;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS Failure To Log Undocumented TRACK Requests Vulnerability"; flow:to_client,established; content:"TRACK / HTTP/1.0|0D 0A|"; nocase; reference:bugtraq,9313; holetype-id:102; ruletype:1; sid:11020011;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS03-051)Microsoft FrontPage Server Extensions Remote Debug Buffer Overrun Vulnerability"; flow:to_server,established; content:"vti_aut/fp30reg.dll"; nocase; http_uri; reference:bugtraq,9007; reference:CVE,2003-0822; reference:ms,03-051; holetype-id:102; ruletype:1; sid:11020012;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"HTTP IIS Cross Site Scripting .htw Vulnerability"; flow:to_client,established; content:".htw?"; nocase; content:"CiWebHitsFile"; nocase; content:"&CiRestriction="; nocase; pcre:"/\.htw\?CiWebHitsFile\s*=\S*&CiRestriction\s*=\s*"<SCRIPT>\S+<\/SCRIPT>"/i"; holetype-id:102; ruletype:1; sid:11020013;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Nginx PHP Arbitrary Code Execution Vulnerability"; flow:to_server,established; content:"%00.php"; nocase; http_raw_uri; pcre:"/\S+\.[a-zA-Z0-9]+%00\.php/i"; holetype-id:102; ruletype:1; sid:11020014;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache HTTP Server Denial Of Service Vulnerability"; flow:to_server,established; content:"Range|3A|"; nocase; content:"bytes=0-"; nocase; pcre:"/Range:[ \t]*bytes=0-,(5-\d+,){100,}/i"; holetype-id:102; ruletype:1; sid:11020015;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Hylafax Faxsurvey Remote Command Execution Vulnerability"; flow:to_server,established; content:"/cgi-bin/faxsurvey?"; nocase; http_uri; reference:bugtraq,2056; reference:cve,1999-0262; holetype-id:102; ruletype:1; sid:11020016;)
+
+alert tcp any any -> any 443 (msg:"OpenSSL SSLv2 Malformed Client Key Remote Buffer Overflow Vulnerability"; flow:to_server,established; content:"AAAAAAAAAA"; pcre:"/\x41{52}\x70\x00*/i"; reference:bugtraq,5363; reference:cve,2002-0656; holetype-id:102; ruletype:1; sid:11020017;)
+
+alert tcp any any -> any 443 (msg:"OpenSSL SSLv2 Malformed Client Key Remote Buffer Overflow Vulnerability"; flow:to_server,established; content:"AAAAAAAAAA"; pcre:"/\x41{128}\x00{8}\x41{4}\x01\x00{3}\x41{12}/i"; reference:bugtraq,5363; reference:cve,2002-0656; holetype-id:102; ruletype:1; sid:11020018;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Http Allaire Coldfusion Overflow Vulnerability"; flow:to_server,established; content:"/cgi-bin/cachemgr.cgi?"; nocase; http_uri; pcre:"/\/cachemgr\x2ecgi\x3fhost\x3d([0-9]+\x2e){3}[0-9]+&port\x3d[0-9]+/iU"; holetype-id:102; ruletype:1; sid:11020020;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS Chunked Encoding Transfer Heap Overflow Vulnerability"; flow:to_server,established; content:"/iisstart.asp"; nocase; pcre:"/\/iisstart.asp\x3F[^\r\n/]{500,}/i"; holetype-id:102; ruletype:1; sid:11020021;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Win32 Batch File Remote Command Execution Vulnerability"; flow:to_server,established; content:"/cgi-bin/test-cgi.bat|3f 7c|"; nocase; http_uri; reference:bugtraq,4335; reference:cve,2002-0061; holetype-id:102; ruletype:1; sid:11020022;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Chunked-Encoding Memory Corruption Vulnerability"; flow:to_server,established; content:"Transfer-Encoding|3A 20|CHUNKED"; nocase; pcre:"/CHUNKED.*[\x0d\x0a]+(FFFFFFF|AAAAAAAAAAAAAAAA|90000000\x09)/is"; reference:bugtraq,5033; reference:cve,2002-0392; holetype-id:102; ruletype:1; sid:11020024;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Http Cart32 Change Admin Password Vulnerability"; flow:to_server,established; content:"/scripts/c32web.exe/ChangeAdminPassword"; nocase; http_uri; reference:cve,2000-0429; holetype-id:102; ruletype:1; sid:11020027;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Cart32 Expdate Administrative Information Disclosure Vulnerability"; flow:to_server,established; content:"/cgi-bin/cart32.exe/expdate"; nocase; http_uri; reference:bugtraq,1358; reference:cve,2000-0430; holetype-id:102; ruletype:1; sid:11020028;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Htdig Arbitrary File Inclusion Vulnerability"; flow:to_server,established; content:"/htsearch?exclude=%60/etc/passwd%60"; nocase; http_raw_uri; reference:bugtraq,1026; reference:cve,2000-0208; holetype-id:102; ruletype:1; sid:11020030;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS99-013)NT IIS Showcode ASP Vulnerability"; flow:to_server,established; content:"/Selector/showcode.asp"; http_uri; nocase; content:"source"; nocase; http_uri; content:"../../"; http_uri; reference:bugtraq,167; reference:cve,1999-0736; holetype-id:102; ruletype:1; sid:11020031;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"NT IIS ASP Alternate Data Streams Vulnerability"; flow:to_server,established; content:"asp|3A 3A 24|DATA"; nocase; holetype-id:102; ruletype:1; sid:11020033;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS01-033)MS Index Server And Indexing Service ISAPI Extension Buffer Overflow Vulnerability"; flow:to_server,established; content:"|2E|ida|3F|"; nocase; pcre:"/^GET[\t ][^\r\n]+\x2Eida\x3F[^\r\n\/\s:]{233,}\s+HTTP\/1\x2e(1|0)[\x0d\x0a]+/i"; reference:bugtraq,2880; reference:cve,2001-0500; holetype-id:102; ruletype:1; sid:11020034;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS01-033)MS Index Server And Indexing Service ISAPI Extension Buffer Overflow Vulnerability"; flow:to_server,established; content:"|2E|idq|3F|"; nocase; http_uri; pcre:"/^GET[\t ][^\r\n]+\x2Eidq\x3F[^\r\n\/:]{233}/i"; reference:bugtraq,2880; reference:cve,2001-0500; holetype-id:102; ruletype:1; sid:11020035;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS02-026)MS IIS/PWS Escaped Characters Decoding Command Execution Vulnerability"; flow:to_server,established; content:"%255c.."; http_raw_uri; nocase; pcre:"/(%255c\x2E{2})+/i"; reference:bugtraq,2708; reference:cve,2001-0333; holetype-id:102; ruletype:1; sid:11020036;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft JET Database Engine VBA Vulnerability"; flow:to_server,established; content:"|7C|shell|28|"; nocase; http_uri; pcre:"/\x7Cshell\x28.*\x29\x7C/iU"; reference:bugtraq,286; holetype-id:102; ruletype:1; sid:11020037;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft JET Database Engine VBA Vulnerability"; flow:to_server,established; content:"/blaat."; nocase; http_uri; pcre:"/\/blaat.(idc|ida|pl)/iU"; holetype-id:102; ruletype:1; sid:11020038;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"NT IIS4 DoS - ExAir Sample Site Vulnerability"; flow:to_server,established; content:"/ExAir/search/"; nocase; http_uri; pcre:"/\/ExAir\/search\/(advsearch|query|search)\x2Easp/iU"; reference:bugtraq,193; reference:cve,1999-0449; holetype-id:102; ruletype:1; sid:11020039;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft Frontpage Server Extensions Path Disclosure Vulnerability"; flow:to_server,established; content:"/_vti_bin/shtml"; nocase; http_uri; pcre:"/\/_vti_bin\/shtml\x2E(dll|exe)\/.+\x2E(htm|html|asp|shtml)/siU"; reference:bugtraq,1174; reference:cve,2000-0413; holetype-id:102; ruletype:1; sid:11020040;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-030)Microsoft IIS Malformed File Extension DoS Vulnerability"; flow:to_server,established; content:"/%69%6E%64%65%78"; http_raw_uri; nocase; pcre:"/\/%69%6E%64%65%78[^\r\n/]{3500,}/i"; reference:bugtraq,1190; reference:cve,2000-0408; holetype-id:102; ruletype:1; sid:11020041;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft Index Server 2.0 File Information and Path Disclosure Vulnerability"; flow:to_server,established; content:"/SQLQHit.asp?CiColumns=*&"; nocase; http_uri; reference:bugtraq,3339; reference:cve,2001-0986; holetype-id:102; ruletype:1; sid:11020042;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-078)Microsoft IIS And PWS Extended Unicode Directory Traversal Vulnerability"; flow:to_server,established; content:"%e0%80%af"; http_raw_uri; pcre:"/^(GET|PUT|PROPFIND)[^\r\n]+%e0%80%af/i"; reference:bugtraq,1806; reference:cve,2000-0884; holetype-id:102; ruletype:1; sid:11020043;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"NT IIS IISAPI Extension Enumerate Root Web Server Directory Vulnerability"; flow:to_server,established; content:"/scripts/bogus.idq"; nocase; http_uri; reference:bugtraq,194; reference:cve,1999-0450; holetype-id:102; ruletype:1; sid:11020044;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-078)Microsoft IIS And PWS Extended Unicode Directory Traversal Vulnerability"; flow:to_server,established; content:"%c0%9v"; http_raw_uri; pcre:"/^(GET|PUT|PROPFIND)[^\r\n]+\x2e\x2e%c0%9v/i"; reference:bugtraq,1806; reference:cve,2000-0884; holetype-id:102; ruletype:1; sid:11020045;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-078)Microsoft IIS And PWS Extended Unicode Directory Traversal Vulnerability"; flow:to_server,established; content:"%c0%qf"; http_raw_uri; pcre:"/^(GET|PUT|PROPFIND)[^\r\n]+\x2e\x2e%c0%qf/i"; reference:bugtraq,1806; reference:cve,2000-0884; holetype-id:102; ruletype:1; sid:11020046;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-078)Microsoft IIS And PWS Extended Unicode Directory Traversal Vulnerability"; flow:to_server,established; content:"%c1%8s"; http_raw_uri; pcre:"/^(GET|PUT|PROPFIND)[^\r\n]+\x2e\x2e%c1%8s/i"; reference:bugtraq,1806; reference:cve,2000-0884; holetype-id:102; ruletype:1; sid:11020047;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-078)Microsoft IIS And PWS Extended Unicode Directory Traversal Vulnerability"; flow:to_server,established; content:"%c1%pc"; http_raw_uri; pcre:"/^(GET|PUT|PROPFIND)[^\r\n]+\x2e\x2e%c1%pc/i"; reference:bugtraq,1806; reference:cve,2000-0884; holetype-id:102; ruletype:1; sid:11020048;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-078)Microsoft IIS And PWS Extended Unicode Directory Traversal Vulnerability"; flow:to_server,established; content:"%d0%af"; http_raw_uri; pcre:"/^(GET|PUT|PROPFIND)[^\r\n]+\x2e\x2e%d0%af/i"; reference:bugtraq,1806; reference:cve,2000-0884; holetype-id:102; ruletype:1; sid:11020049;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-078)Microsoft IIS And PWS Extended Unicode Directory Traversal Vulnerability"; flow:to_server,established; content:"%d1%9c"; http_raw_uri; pcre:"/^(GET|PUT|PROPFIND)[^\r\n]+\x2e\x2e%d1%9c/i"; reference:bugtraq,1806; reference:cve,2000-0884; holetype-id:102; ruletype:1; sid:11020050;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS 5.0 Printer ISAPI Extension Buffer Overflow Vulnerability"; flow:to_server,established; content:".printer"; nocase; pcre:"/(Cyrus\x3A\x90{22}|Beavuh\x3A\x20\x90{20})/i"; reference:bugtraq,2674; reference:cve,2001-0241; holetype-id:102; ruletype:1; sid:11020052;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-078)Microsoft IIS And PWS Extended Unicode Directory Traversal Vulnerability"; flow:to_server,established; content:"%c1%9c"; nocase; pcre:"/^(GET|PUT|PROPFIND)[^\r\n]+\x2e\x2e%c1%9c/i"; reference:bugtraq,1806; reference:cve,2000-0884; holetype-id:102; ruletype:1; sid:11020053;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Http Cart32 Change Client List Vulnerability"; flow:to_server,established; content:"/scripts/cart32.exe/cart32clientlist"; nocase; http_uri; reference:cve,2000-0429; holetype-id:102; ruletype:1; sid:11020054;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"MyBB Compromised Source Packages Backdoor Vulnerability"; flow:to_server,established; content:"collapsed="; nocase; pcre:"/collapsed\x3D([0-9]+\x7c){23}/i"; nocase; reference:bugtraq,49993; holetype-id:102; ruletype:1; sid:11020055;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS02-026)MS IIS/PWS Escaped Characters Decoding Command Execution Vulnerability"; flow:to_server,established; content:"%35"; http_raw_uri; nocase; pcre:"/^(GET|POST|HEAD|PROPFIND)\s[^\r\n]*\x2e{2}(%%35c|%%35%63|%25%35%63)/i"; nocase; reference:cve,2001-0333; reference:bugtraq,2708; holetype-id:102; ruletype:1; sid:11020057;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS02-026)MS IIS/PWS Escaped Characters Decoding Command Execution Vulnerability"; flow:to_server,established; content:"%252e"; http_raw_uri; nocase; pcre:"/^(GET|POST|HEAD|PROPFIND)\s[^\r\n]*(\x2e%252e\/|%252e\x2e\/)/i"; nocase; reference:cve,2001-0333; reference:bugtraq,2708; holetype-id:102; ruletype:1; sid:11020058;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS02-026)MS IIS/PWS Escaped Characters Decoding Command Execution Vulnerability"; flow:to_server,established; content:"%32%65"; http_raw_uri; nocase; pcre:"/^(GET|POST|HEAD|PROPFIND)\s[^\r\n]*(%%32%65\x2e\/|\x2e%%32%65\/|\x2e%25%32%65\/|%25%32%65\x2e\/)/i"; nocase; reference:cve,2001-0333; reference:bugtraq,2708; holetype-id:102; ruletype:1; sid:11020059;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Nginx PHP Arbitrary Code Execution Vulnerability"; flow:to_server,established; content:".php"; http_uri; nocase; pcre:"/^GET.+(\.txt|\.png|\.bmp|\.dib|\.gif)\/\w+\.php/i"; holetype-id:102; ruletype:1; sid:11020060;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Nginx PHP Arbitrary Code Execution Vulnerability"; flow:to_server,established; content:".php"; http_uri; nocase; pcre:"/^GET.+(\.jpg|\.jpeg|\.jpe|\.jfif|\.tif|\.tiff)\/\w+\.php/i"; holetype-id:102; ruletype:1; sid:11020061;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"IMatix Xitami If-Modified-Since Remote Buffer Overflow Vulnerability"; flow:to_server,established; content:"If-Modified-Since:"; nocase; pcre:"/If-Modified-Since:.{72,}(\x53\x2b\xab\x71|\x81\x69\xa7\x7c)\xeb\x22/is"; reference:bugtraq,25772; reference:cve,2007-5067; holetype-id:102; ruletype:1; sid:11020062;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Httpdx HTTP Server Tolog() Function Format String Vulnerability"; flow:to_server,established; content:"%258x%258x%258x%258x"; http_raw_uri; nocase; reference:cve,2009-4769; holetype-id:102; ruletype:1; sid:11020063;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache HTTP Server HttpOnly Cookie Information Disclosure Vulnerability"; flow:to_client,established; content:"HTTP/1.1 400 Bad Request|0D 0A|"; nocase; content:"Content-Length|3A| "; nocase; byte_test:4,>,4096,0,relative,string,dec; reference:bugtraq,51706; reference:cve,2012-0053; holetype-id:102; ruletype:1; sid:11020064;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Savant Web Server 3.1 Buffer Overflow Vulnerability"; flow:to_server,established; content:"|b0 03 04 01 7b 14 20 2f 25 66 81 ca ff 0f 42 52 6a 02 58 cd 2e 3c 05 5a 74 ef b8 52 30 63 58 8b fa af 75 ea af 75 e7 ff e7|"; reference:bugtraq,51607; holetype-id:102; ruletype:1; sid:11020065;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS Malformed Directory Security Bypass Vulnerability"; flow:established,to_server; content:".asp|2F|"; fast_pattern; http_uri; nocase; pcre:"/\.asp\x2F\w+\.(jpg|jpeg|gif|bmp|png|tif|ico|txt)/iU";holetype-id:102; ruletype:1; sid:11020066;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS Malformed Directory Security Bypass Vulnerability"; flow:established,to_server; content:".asa|2F|"; fast_pattern; http_uri; nocase; pcre:"/\.asa\x2F\w+\.(jpg|jpeg|gif|bmp|png|tif|ico|txt)/iU";holetype-id:102; ruletype:1; sid:11020067;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache AXIS XML Parser echoheaders.jws Denial of Service Vulnerability"; flow:established,to_server; content:"<!ENTITY"; nocase; pcre:"/\x3C!ENTITY x\d+ \x22&x\d+\x3B&x\d+\x3B\x22>\s+\x3C!ENTITY x\d+ \x22&x\d+\x3B&x\d+\x3B\x22>\s+\x3C!ENTITY x\d+ \x22&x\d+\x3B&x\d+\x3B\x22>\s+\x3C!ENTITY x\d+ \x22&x\d+\x3B&x\d+\x3B\x22>\s+\x3C!ENTITY x\d+ \x22&x\d+\x3B&x\d+\x3B\x22>\s+/i";holetype-id:102; ruletype:1; sid:11020068;)
+
+#alert tcp any any -> any $HTTP_PORTS (msg:"Apache Mod_NTLM Authorization Heap Overflow Vulnerability"; flow:established,to_server; content:"Authorization: "; nocase; pcre:"/Authorization: [^\r\n]{1024}/i";reference:bugtraq,7388;holetype-id:102; ruletype:1; sid:11020069;)
+alert tcp any any -> any 5250 (msg:"CA iGateway Debug Mode HTTP GET Request Buffer Overflow Vulnerability"; flow:established,to_server; content:"/|20 20 20 20 20 20 20 20 20 20|"; nocase; pcre:"/get [^\r\n]*\/\x20{20}[^\r\n]{460}/i";reference:bugtraq,15025;holetype-id:102; ruletype:1; sid:11020070;)
+
+alert tcp any any -> any 5250 (msg:"Computer Associates Multiple Product HTTP Request Remote Buffer Overflow Vulnerability"; flow:established,to_server; content:"get "; nocase; pcre:"/get [^\r\n\x00]{1024}/i";reference:bugtraq,15025;holetype-id:102; ruletype:1; sid:11020071;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Peercast.org PeerCast Remote Buffer Overflow Vulnerability"; flow:established,to_server; content:"/stream"; http_uri; nocase; pcre:"/\/stream\/?\?[^\r\n/]{780}/iU";reference:bugtraq,17040; reference:cve,2006-1148;holetype-id:102; ruletype:1; sid:11020072;)
+
+alert tcp any any -> any 14534,$HTTP_PORTS (msg:"TeamSpeak Remote Denial of Service Vulnerability"; flow:established,to_server; content:"username="; nocase; pcre:"/username=[^\r\n&]{1024}/iU";holetype-id:102; ruletype:1; sid:11020073;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS11-100)Microsoft .NET Framework Form Authentication URI Open Redirection Vulnerability"; flow:established,to_server; content:".aspx?ReturnURL"; nocase; http_uri; pcre:"/\.aspx\?ReturnURL=http\x3a\x2f\x2f([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?\\/iU"; reference:bugtraq,51202; reference:cve,2011-3415; reference:ms,11-100; holetype-id:102; ruletype:1; sid:11020074;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"RedHat Piranha Virtual Server Package Passwd.php3 Arbitrary Command Execution Vulnerability"; flow:established,to_server; content:"/piranha/secure/passwd.php3?"; nocase; http_uri; pcre:"/\/piranha\/secure\/passwd\.php3\?try[^\r\n\x22\x27]+&passwd=ACCEPT/iU"; reference:bugtraq,1148; reference:bugtraq,1149; reference:cve,2000-0248; reference:cve,2000-0322; holetype-id:102; ruletype:1; sid:11020075;)
+
+
+alert tcp any any -> any 2947 (msg:"Berlios GPSD Remote Format String Vulnerability"; flow:established,to_server; content:"%.8x%.8x%.8x%.8x%.8x%.8x%.8x%."; nocase; http_raw_uri; pcre:"/(%\.8x){7}%.[^\x00\x0a\x0d\x0c]+lx%hn%\.[^\x00\x0a\x0d\x0c]+lx%hn/iU"; reference:bugtraq,12371; reference:cve,2004-1388; holetype-id:102; ruletype:1; sid:11020076;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Linksys WRT54G Wireless Router Multiple Remote Vulnerability"; flow:established,to_server; content:"/apply.cgi"; nocase; pcre:"/POST\s+\/apply\.cgi[^\x00]+\x0a\x00{100}/i"; reference:bugtraq,14822; reference:cve,2005-2799; holetype-id:102; ruletype:1; sid:11020077;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Content-Length Header Remote Denial Of Service Vulnerability"; flow:established,to_server; content:"Content-Type|3A| application/x-www-form-urlencoded"; nocase; content:"Content-Length|3A| "; nocase; byte_test:10,>,2147483000,0,relative,string,dec,little; reference:bugtraq,52704; holetype-id:102; ruletype:1; sid:11020078;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Exif Extension Exif_read_data() Function Remote Denial Of Service Vulnerability"; flow:to_server,established; content:"|02 02 03 00 01 00 00 00 00 00 00 00 03 02 03 00 01 00 00 00 00 00 00 00 04 02 05 00 01 00 00 00 7C 03 00 00 05 02 05 00 03 00 00 A0 84 03 00 00 06 12 08 00 06 00 00 00 8C 03 00 00 07 02 02 00|"; reference:bugtraq,46365; reference:cve,2011-0708; holetype-id:102; ruletype:1; sid:11020079;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Exif Extension Exif_read_data() Function Remote Denial Of Service Vulnerability"; flow:to_server,established; content:"|02 02 03 00 01 00 00 00 00 00 00 00 03 02 03 00 01 00 00 00 00 00 00 00 04 02 05 00 01 00 00 00 7C 03 00 00 05 02 05 00 01 00 00 20 84 03 00 00 06 12 08 00 06 00 00 00 8C 03 00 00 07 02 02 00|"; reference:bugtraq,46365; reference:cve,2011-0708; holetype-id:102; ruletype:1; sid:11020080;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP PDORow Object Remote Denial Of Service Vulnerability"; flow:to_server,established; content:"PDO|3A 3A|FETCH_LAZY"; nocase; content:"session_start"; nocase; content:"$_SESSION"; nocase; pcre:"/->fetch\s*\(\s*PDO::FETCH_LAZY\s*\).+session_start\([ \t]*\).+\$_SESSION\[[\x22\x27]PDORow[\x22\x27]\]\s*=/is"; reference:bugtraq,51952; reference:cve,2012-0788; holetype-id:102; ruletype:1; sid:11020081;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Remote Denial Of Service Vulnerability"; flow:to_server,established; content:"strtotime"; nocase; pcre:"/while\s*\(\s*true\s*\)\s*\{\s*strtotime\s*\(\s*[\x22\x27][^\)]+Europe\/[^\)]+[\x22\x27]/i"; reference:bugtraq,52043; reference:cve,2012-0789; holetype-id:102; ruletype:1; sid:11020082;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Struts2 XSLTResult.java Remote Arbitrary File Upload Vulnerability"; flow:to_server,established; content:"@Runtime@getRuntime().exec"; nocase; pcre:"/<xsl:value-of\s+select[^>]+ognl:getValue\s*\([\x22\x27]@Runtime@getRuntime\(\s*\)\.exec\s*\([\x22\x27][^\x22\x27]+[\x22\x27]/i"; reference:bugtraq,52702; holetype-id:102; ruletype:1; sid:11020083;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Multiple Vendors Libc Regcomp() Stack Exhaustion Denial Of Service Vulnerability"; flow:to_server,established; content:"(.?)(((("; nocase; pcre:"/\(\.\?\)\({123}\.\*(\)\{\d+,\d+\})+/is"; reference:bugtraq,50541; reference:cve,2011-3336; holetype-id:102; ruletype:1; sid:11020084;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Symlink() Open_basedir Restriction Bypass Vulnerability"; flow:to_server,established; content:"mkdir"; nocase; content:"symlink"; nocase; pcre:"/mkdir\s*\([^\)]+\).+chdir\s*\([^\)]+\).+symlink\(/is"; reference:bugtraq,37032; holetype-id:102; ruletype:1; sid:11020085;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"ThinkPHP Framework Execution Of Arbitrary Code Vulnerability"; flow:to_server,established; content:"index.php/module/action/param1/${"; nocase; http_uri; holetype-id:102; ruletype:1; sid:11020086;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Xml_utf8_decode() UTF-8 Input Validation Vulnerability"; flow:to_server,established; content:"addslashes"; nocase; content:"utf8_decode"; nocase; pcre:"/0xf0[^\r\n]+0xc0[^\r\n]+0xc0[^\r\n]+0xa7.+addslashes\(.+utf8_decode\s*\(/is"; reference:bugtraq,44605; reference:cve,2010-3870; holetype-id:102; ruletype:1; sid:11020087;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Zip Extension Stream_get_contents() Function Denial Of Service Vulnerability"; flow:to_server,established; content:"ZipArchive"; nocase; content:"stream_get_contents"; nocase; pcre:"/[\x22\x27]META\-INF\/MANIFEST\.MF[\x22\x27].+=\s*new\s*ZipArchive.+->getStream\s*\(.+stream_get_contents\s*\(/is"; reference:bugtraq,46969; reference:cve,2011-1470; holetype-id:102; ruletype:1; sid:11020088;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Prior To 5.3.7 Multiple NULL Pointer Dereference Denial Of Service Vulnerability"; flow:to_server,established; content:"str_repeat"; nocase; content:"var_dump"; nocase; content:"strtotime"; nocase; pcre:"/str_repeat\(.+var_dump\s*\(\s*strtotime\(/is"; reference:bugtraq,49249; reference:cve,2011-3182; holetype-id:102; ruletype:1; sid:11020089;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Scrutinizer Multiple Security Vulnerability"; flow:to_server,established; content:"/cgi-bin/userprefs.cgi?newUser"; nocase; http_uri; reference:bugtraq,52989; reference:cve,2012-1258; holetype-id:102; ruletype:1; sid:11020090;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP GetSymbol() Function Denial Of Service Vulnerability"; flow:to_server,established; content:"NumberFormatter"; nocase; content:"getSymbol"; nocase; pcre:"/=\s*new\s+NumberFormatter\s*\(.+->getSymbol\s*\(\s*[1-9]\d{9}\s*\)/is"; reference:bugtraq,45119; reference:cve,2010-4409; holetype-id:102; ruletype:1; sid:11020091;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sourcefabric Newscoop Multiple Remote File Include Vulnerability"; flow:to_server,established; content:".php?GLOBALS[g_campsiteDir]"; nocase; pcre:"/((include\/phorum_load)|(conf\/install_conf)|(conf\/liveuser_configuration))\.php\?GLOBALS\[g_campsiteDir\][ \t]*=[ \t]*http:\/\/[^\r\n]+%00/i"; reference:bugtraq,53147; reference:cve,2012-1933; holetype-id:102; ruletype:1; sid:11020092;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Shmop_read() Remote Integer Overflow Vulnerability"; flow:to_server,established; content:"shmop_read"; nocase; pcre:"/=\s*ftok\s*\(.+shmop_open\s*\(.+shmop_read\s*\([^\)]+,[^\)]+,\s*[2-9]\d{9}/is"; reference:bugtraq,46786; reference:cve,2011-1092; holetype-id:102; ruletype:1; sid:11020093;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Socket_connect() Function Stack Buffer Overflow Vulnerability"; flow:to_server,established; content:"str_repeat"; nocase; content:"socket_connect"; nocase; pcre:"/str_repeat\s*\([^\)]+,\s*(19\d|([2-9]\d{2,})\s*\)).+socket_create\s*\(.+socket_connect\s*\(/is"; reference:bugtraq,47950; reference:cve,2011-1938; holetype-id:102; ruletype:1; sid:11020094;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Counter.exe Denial of Service Vulnerability"; flow:established,to_server; content:"/counter.exe?"; nocase; pcre:"/GET[ \t]+[^\r\n]*\/counter\.exe\?(%0a|[^\r\n]{1200})/i"; reference:bugtraq,267; reference:cve,1999-1030; holetype-id:102; ruletype:1; sid:11020096;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Allaire ColdFusion Source Code Disclosure and DoS Vulnerability"; flow:established,to_server; content:"/cfappman/index.cfm"; nocase; http_uri; holetype-id:102; ruletype:1; sid:11020098;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Allaire ColdFusion Source Code Disclosure and DoS Vulnerability"; flow:established,to_server; content:"/cfdocs/cfmlsyntaxcheck.cfm"; nocase; http_uri; holetype-id:102; ruletype:1; sid:11020099;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Allaire ColdFusion Source Code Disclosure and DoS Vulnerability"; flow:established,to_server; content:"/cfdocs/exampleapp/publish/admin/addcontent.cfm"; nocase; http_uri; holetype-id:102; ruletype:1; sid:11020100;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Allaire ColdFusion Source Code Disclosure and DoS Vulnerability"; flow:established,to_server; content:"/cfdocs/examples/"; nocase; http_uri; pcre:"/\/cfdocs\/examples\/(cvbeans\/beaninfo|mainframeset|parks\/detail)\.cfm/iU"; holetype-id:102; ruletype:1; sid:11020101;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Allaire ColdFusion Source Code Disclosure and DoS Vulnerability"; flow:established,to_server; content:"/cfdocs/expelval/"; nocase; http_uri; pcre:"/\/cfdocs\/expelval\/(displayopenedfile|sendmail)\.cfm/iU"; holetype-id:102; ruletype:1; sid:11020104;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Allaire ColdFusion Source Code Disclosure and DoS Vulnerability"; flow:established,to_server; content:"/cfdocs/expressions.cfm"; nocase; http_uri; holetype-id:102; ruletype:1; sid:11020106;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Allaire ColdFusion Source Code Disclosure and DoS Vulnerability"; flow:established,to_server; content:"/cfdocs/root.cfm"; nocase; http_uri; holetype-id:102; ruletype:1; sid:11020107;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Allaire ColdFusion Source Code Disclosure and DoS Vulnerability"; flow:established,to_server; content:"/cfdocs/snippets/"; nocase; http_uri; pcre:"/\/cfdocs\/snippets\/(evaluate|gettempdirectory|viewexample|fileexists)\.cfm/iU"; holetype-id:102; ruletype:1; sid:11020108;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Allaire ColdFusion Source Code Disclosure and DoS Vulnerability"; flow:established,to_server; content:"/cfdocs/zero.cfm"; nocase; http_uri; holetype-id:102; ruletype:1; sid:11020109;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"AnalogX SimpleServer:WWW 1.03 DoS Vulnerability"; flow:established,to_server; content:"/cgi-bin/abcdefgh"; http_uri; reference:bugtraq,1076; reference:cve,2000-0243; holetype-id:102; ruletype:1; sid:11020110;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Oracle mod_wl HTTP POST Request Remote Buffer Overflow Vulnerability"; flow:established,to_server; content:"/.jsp "; nocase; pcre:"/^(GET|POST)[ \t]+[^\r\n]*\/\.jsp[ \t]+[^\r\n]{1000}/i"; reference:bugtraq,30273; reference:cve,2008-3257; holetype-id:102; ruletype:1; sid:11020111;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"BEA Systems WebLogic Server DOS Device Denial of Service Vulnerability"; flow:established,to_server; content:"/aux"; nocase; pcre:"/^(GET|POST)[ \t]+[^\r\n]*\/aux(\.jsp|%00\.jsp|%00)?[ \t]+HTTP\/1\.(0|1)/i"; reference:bugtraq,3816; reference:bugtraq,4646; reference:cve,2002-0106; holetype-id:102; ruletype:1; sid:11020112;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sun Cobalt RaQ Service.CGI HTTP Server Denial of Service Vulnerablity"; flow:established,to_server; content:"/cgi-bin/.cobalt/alert/service.cgi?service=/"; nocase; http_uri; pcre:"/\/cgi-bin\/\.cobalt\/alert\/service\.cgi\?service=\/[^\r\n]{1200}/iU"; reference:bugtraq,4209; reference:cve,2002-0348; holetype-id:102; ruletype:1; sid:11020113;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Easy File Sharing Web Server Input Validation Vulnerablity"; flow:established,to_server; content:"/%25n"; nocase; pcre:"/^GET[ \t]+[^\r\n]*\/%25n[ \t]+HTTP\/1\.(0|1)/i"; reference:bugtraq,17046; reference:cve,2006-1159; holetype-id:102; ruletype:1; sid:11020114;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"FireStats bridge.php Denial of Service Vulnerablity"; flow:established,to_server; content:"/wp-content/plugins/firestats/bridge.php?file_id=reset_password&show=1"; nocase; http_uri; holetype-id:102; ruletype:1; sid:11020115;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"IBM Lotus Domino Server Web Service Denial of Service Vulnerablity"; flow:established,to_server; content:"/cgi-bin/"; nocase; http_uri; pcre:"/\/cgi-bin\/[^\r\n]{330,430}/iU"; reference:cve,2005-0986; holetype-id:102; ruletype:1; sid:11020116;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"IBM WebSphere Caching Proxy Denial of Service Vulnerablity"; flow:established,to_server; content:"GET"; nocase; depth:3; pcre:"/^GET[ \t\r\n]*($|HTTP(\/1\.0|\/1\.1)?[\r\n]*$)/i"; reference:cve,2004-0684; holetype-id:102; ruletype:1; sid:11020117;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"IBM WebSphere Large HTTP Header Buffer Overflow Vulnerability"; flow:established,to_server; content:"/anyfile.jsp"; nocase; http_uri; pcre:"/HOST\x3a[ \t]+[^\r\n]{796}/i"; reference:cve,2002-1153; reference:bugtraq,5749; holetype-id:102; ruletype:1; sid:11020118;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"IBM WebSphere Large HTTP Header Buffer Overflow Vulnerability"; flow:established,to_server; content:"/index.html"; nocase; http_uri; pcre:"/HOST\x3a[ \t]+[^\r\n]{1000}/i"; reference:cve,2002-1153; reference:bugtraq,5749; holetype-id:102; ruletype:1; sid:11020119;)
+
+alert tcp any any -> any 8181,$HTTP_PORTS (msg:"IPSwitch Imail Imonitor Denial of Service Vulnerability"; flow:established,to_server; content:"/status.cgi"; nocase; pcre:"/^(GET|POST)[ \t]+[^\r\n]*status\.cgi[ \t]+HTTP\/1\.(0|1)/im"; reference:bugtraq,3430; holetype-id:102; ruletype:1; sid:11020120;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS02-053)Microsoft FrontPage Server Extensions SmartHTML Denial of Service Vulnerability"; flow:established,to_server; content:"/shtml.dll"; nocase; http_uri; pcre:"/Host\x3a[ \t]+\x2f{900}/im"; reference:cve,2002-0692; reference:bugtraq,5804; holetype-id:102; ruletype:1; sid:11020121;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS01-016)Microsoft IIS PROPFIND Method Denial of Service Vulnerability"; flow:established,to_server; content:"<a:propfind"; nocase; content:"<a:prop><a:displayname /><u:"; nocase; pcre:"/<u\x3a[^\/>\r\n]{1200}/im"; reference:cve,2001-0151; holetype-id:102; ruletype:1; sid:11020122;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Eitsop My Web Server Remote Denial of Service Vulnerability"; flow:established,to_server; content:"/AAAAAAA"; nocase; pcre:"/^(GET|POST)[ \t]+[^\r\n]*\/A{300}[ \t]+HTTP\/1\.(0|1)/im"; reference:cve,2006-2756; reference:bugtraq,18144; holetype-id:102; ruletype:1; sid:11020123;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Phorum PHP Forum Administration Package Any File Download and Defacement Vulnerability"; flow:established,to_server; content:".php3"; nocase; pcre:"/(GET|POST)[ \t]+[^\r\n]*\/(admin|code|piranha\/secure\/passwd|read|upgrade|user|violation)\.php3[^\r\n]*[ \t]HTTP\/1\.0/im"; reference:cve,2000-1228; reference:bugtraq,2271; reference:bugtraq,2272; holetype-id:102; ruletype:1; sid:11020124;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"SalesLogix eViewer Denial of Service Vulnerability"; flow:established,to_server; content:"/scripts/stxweb.dll/admin"; nocase; http_uri; reference:cve,2000-0278; reference:bugtraq,1089; holetype-id:102; ruletype:1; sid:11020125;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"SAP Internet Communication Manager Long URI Handling Denial of Service Vulnerability"; flow:established,to_server; content:"/foo.gif?sap-isc-key="; nocase; http_uri; pcre:"/\/foo\.gif\?sap-isc-key=[^\r\n]{300}/i"; reference:cve,2007-3615; reference:bugtraq,24774; holetype-id:102; ruletype:1; sid:11020126;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sun Java HotSpot Denial of Service Vulnerability"; flow:established,to_server; content:"/servlet/["; nocase; http_uri; reference:cve,1999-1478; reference:bugtraq,522; holetype-id:102; ruletype:1; sid:11020127;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Vignette License Template Denial Of Service Vulnerability"; flow:established,to_server; content:"/vgn/license"; nocase; http_uri; reference:cve,2003-0403; reference:bugtraq,7694; holetype-id:102; ruletype:1; sid:11020129;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WordPress Trackback Denial Of Service Vulnerability"; flow:established,to_server; content:"charset=UTF-8%2C"; nocase; pcre:"/charset=(UTF-8%2C){100}/i"; reference:cve,2009-3622; holetype-id:102; ruletype:1; sid:11020130;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP zend_strtod() Function Floating-Point Value Denial of Service Vulnerability"; flow:established,to_server; content:"2.2250738585072011e-308"; nocase; reference:cve,2010-4645; reference:cve,2010-4476; reference:bugtraq,45668; holetype-id:102; ruletype:1; sid:11020131;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Host Header Denial of Service Vulnerability"; flow:established,to_server; content:"HOST|3A|"; nocase; pcre:"/HOST\x3a[ \t]*[^\r\n]{1000}/is"; reference:cve,2003-0245; reference:cve,2007-6258; reference:bugtraq,7723; holetype-id:102; ruletype:1; sid:11020132;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"IIS4 Sample Site Denial of Service Vulnerability"; flow:established,to_server; content:"/iissamples/ISSamples/query.asp"; nocase; http_uri; reference:cve,1999-0449; reference:bugtraq,193; holetype-id:102; ruletype:1; sid:11020133;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Novell iManager Schema Create Class Stack Buffer Overflow Vulnerability"; flow:to_server,established; content:"/nps/servlet/webacc"; http_uri; nocase; content:"&tree="; http_uri; nocase; pcre:"/&tree=[^\r\n\x26]{256}&Entrada\./imU"; reference:cve,2011-4188; reference:bugtraq,40480; holetype-id:102; ruletype:1; sid:11020134;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache mod_ntlm Overflow Remote Command Execution Vulnerability"; flow:to_server,established; content:"Authorization|3a|"; nocase; pcre:"/Authorization\x3a[ \t]+(%n%n%n%n|[^\r\n]{1000})/im"; holetype-id:102; ruletype:1; sid:11020135;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"BEA WebLogic JSP Plug-In Multiple Buffer Overflows Vulnerability"; flow:to_server,established; content:"/test.jsp?"; nocase; http_uri; pcre:"/\/test\.jsp\?[^\r\n]{1000}/iU"; reference:cve,2000-0681; reference:bugtraq,1570; holetype-id:102; ruletype:1; sid:11020137;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"BEA WebLogic Server Double Dot Buffer Overflow Vulnerability"; flow:to_server,established; content:"/.."; nocase; http_uri; pcre:"/\/\.\.[^\r\n]{1000}/U"; reference:cve,2001-0098; reference:bugtraq,2138; holetype-id:102; ruletype:1; sid:11020138;)
+
+alert tcp any any -> any 5250,$HTTP_PORTS (msg:"CA iTechnology iGateway Service Content-Length Heap Overflow Vulnerability"; flow:to_server,established; content:"Content-Length|3A| -"; nocase; pcre:"/Content-Length\x3a -\d+/i"; reference:cve,2005-3653; reference:bugtraq,16354; holetype-id:102; ruletype:1; sid:11020140;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"IBM Websphere/Net.Commerce CGI-BIN Macro Denial of Service Vulnerability"; flow:to_server,established; content:"/cgi-bin/ncommerce3/ExecMacro/macro.d2w/%0A%0A"; nocase; pcre:"/\/cgi-bin\/ncommerce3\/ExecMacro\/macro\.d2w\/(%0A){300}/i"; reference:cve,2001-0390; reference:bugtraq,2588; holetype-id:102; ruletype:1; sid:11020141;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS07-041)Microsoft IIS 5.1 DLL Request Remote Code Execution Vulnerability"; flow:to_server,established; content:".aspx/~"; nocase; http_uri; pcre:"/\/(login|mail|main|default|index|logout)\.aspx\/~\d/iU"; reference:cve,2005-4360; reference:bugtraq,15921; holetype-id:102; ruletype:1; sid:11020142;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Lotus Domino HTTP GET Request Buffer Overflow Vulnerability"; flow:to_server,established; content:"/cgi-bin/,,"; nocase; http_uri; pcre:"/\/cgi-bin\/,{500}/iU"; reference:cve,2000-0023; reference:bugtraq,881; holetype-id:102; ruletype:1; sid:11020144;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft FrontPage Extensions for IIS dvwssr.dll Buffer Overflow Vulnerability"; flow:to_server,established; content:"/dvwssr.dll?"; nocase; pcre:"/\/dvwssr\.dll\?[^\r\n]{800}/i"; reference:cve,2000-0260; reference:bugtraq,1109; holetype-id:102; ruletype:1; sid:11020145;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft FrontPage Server Extensions Buffer Overflow Vulnerability"; flow:to_server,established; content:"/fp30reg.dll?"; nocase; pcre:"/\/fp30reg\.dll\?[^\r\n]{259}/i"; reference:cve,2001-0341; reference:bugtraq,2906; holetype-id:102; ruletype:1; sid:11020146;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Netscape Enterprise Server Denial o Service Vulnerability"; flow:to_server,established; content:"%80%1b%c0%1f"; nocase; reference:cve,2001-0252; reference:bugtraq,2282; holetype-id:102; ruletype:1; sid:11020148;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Oracle 10g Buffer Overflow Vulnerability"; flow:to_server,established; content:"/search?wf="; nocase; pcre:"/\/search\?wf=[^\r\n]{1000}/i"; holetype-id:102; ruletype:1; sid:11020149;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Oracle 9i Database Server iSQL Plus Buffer Overflow Vulnerability"; flow:to_server,established; content:"/isqlplus"; nocase; pcre:"/action=logon&(userid|username)=[^\r\n]{1000}/i"; reference:cve,2002-1264; reference:bugtraq,6085; holetype-id:102; ruletype:1; sid:11020150;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Oracle Reports Server Buffer Overflow Vulnerability"; flow:to_server,established; content:"/rwcgi60"; nocase; http_uri; pcre:"/\/(dev60cgi|report_bin|cgi-bin)\/rwcgi60(\.exe)?/i"; reference:cve,2002-0947; reference:bugtraq,4848; holetype-id:102; ruletype:1; sid:11020151;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Multipart/Form-Data Buffer Overflow Vulnerability"; flow:to_server,established; content:"135408810612827886801697150081"; nocase; content:"boundary=---------------------------135408810612827886801697150081"; nocase; pcre:"/135408810612827886801697150081[\r\n]+Content-Length\x3a[ \t]+567[\r\n]+-{29}135408810612827886801697150081[\r\n]+Content-Disposition\x3a[ \t]+form-data\x3b[ \t]+name=\x22\x08\x22/i"; reference:cve,2002-0081; reference:bugtraq,4183; holetype-id:102; ruletype:1; sid:11020152;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Savant Webserver cgitest.exe Denial Of Service Vulnerability"; flow:to_server,established; content:"/cgi-bin/cgitest.exe"; nocase; http_uri; pcre:"/\/cgi-bin\/cgitest\.exe\??.*(\r\n){2}[^\r\n]{136}/is"; reference:cve,2002-2146; reference:bugtraq,5706; holetype-id:102; ruletype:1; sid:11020153;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sun ONE/iPlanet Web Server Chunked Encoding Overflow Vulnerability"; flow:to_server,established; content:"Transfer-Encoding: chunked"; nocase; pcre:"/\r\n\r\n\x34\r\n.{4}\r\n7FFFFFFF\r\n./is"; reference:cve,2002-0845; reference:bugtraq,5433; holetype-id:102; ruletype:1; sid:11020154;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WebObjects Buffer Overflow Vulnerability"; flow:to_server,established; content:"/scripts/WebObjects.exe/EmptyProject"; nocase; pcre:"/Accept\x3a[ \t]+[^\r\n]{1000}/i"; reference:cve,2000-0299; reference:bugtraq,1896; holetype-id:102; ruletype:1; sid:11020155;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"iPlanet/Netscape Enterprise Server Web Publisher Buffer Overflow Vulnerability"; flow:to_server,established; content:"GETPROPERTIES"; nocase; pcre:"/^GETPROPERTIES[ \t]+[^\r\n]{1000}/i"; reference:cve,2001-0746; reference:bugtraq,2732; holetype-id:102; ruletype:1; sid:11020156;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"iPlanet/Netscape Enterprise Server Web Publisher Buffer Overflow Vulnerability"; flow:to_server,established; content:"GETATTRIBUTENAMES"; nocase; pcre:"/^GETATTRIBUTENAMES[ \t]+[^\r\n]{1000}/i"; reference:cve,2001-0746; reference:bugtraq,2732; holetype-id:102; ruletype:1; sid:11020157;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"iPlanet Search Buffer Overflow Vulnerability"; flow:to_server,established; content:"NS-rel-doc-name"; http_uri; nocase; pcre:"/NS-rel-doc-name[^\r\n]{500}/iU"; reference:cve,2002-0686; reference:bugtraq,4851; holetype-id:102; ruletype:1; sid:11020158;)
+
+alert tcp any any -> any 7144,$HTTP_PORTS (msg:"PeerCast getAuthUserPass Buffer Overflow Vulnerability"; flow:to_server,established; content:"/http/"; nocase; content:"Authorization: Basic OmZvb29"; nocase; pcre:"/OmZ(vb29){128,}vbwo=[\r\n]+/i"; reference:cve,2008-2040; reference:bugtraq,28986; holetype-id:102; ruletype:1; sid:11020159;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP-CGI Information Disclosure Vulnerability"; flow:to_server,established; content:"?-"; nocase; http_uri; pcre:"/(\/|(\.php))\?-[dc]([ ]*|\w+)/iU"; reference:bugtraq,53388; reference:cve,2012-1823; holetype-id:102; ruletype:1; sid:11020160;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"SAP BusinessObjects Axis2 Component Default Password Security Bypass Vulnerability"; flow:to_server,established; content:"axis2/axis2-admin/login"; nocase; http_uri; content:"userName=admin&password=axis2&submit"; nocase; http_uri; reference:cve,2010-0219; holetype-id:102; ruletype:1; sid:11020161;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Family Connections Argv[1] Parameter Remote Arbitrary Command Execution Vulnerability"; flow:to_server,established; content:"/dev/less.php?argv[1]"; nocase; http_uri; reference:bugtraq,50897; holetype-id:102; ruletype:1; sid:11020162;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHPLDAPadmin Cross Site Scripting and PHP Code Injection Vulnerability"; flow:to_server,established; content:"phpldapadmin/htdocs/cmd.php"; nocase; http_uri; content:"cmd=query_engine&query=none&search=1&orderby="; nocase; http_uri; reference:bugtraq,50331; reference:cve,2011-4075; holetype-id:102; ruletype:1; sid:11020163;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHPScheduleIt Reserve.php Remote Code Execution Vulnerability"; flow:to_server,established; content:"phpscheduleit/reserve.php"; nocase; http_uri; content:"btnSubmit=1&start_date=1"; reference:bugtraq,31520; reference:cve,2008-6132; holetype-id:102; ruletype:1; sid:11020164;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Zope Cmd Parameter Remote Command Execution Vulnerability"; flow:to_server,established; content:"p_/webdav/xmltools/minidom/xml/sax/saxutils/os/popen2"; nocase; http_uri; content:"cmd="; nocase; http_uri; reference:bugtraq,49857; reference:cve,2011-3587; holetype-id:102; ruletype:1; sid:11020165;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PmWiki PageListSort() Function PHP Code Injection Vulnerability"; flow:to_server,established; content:"pmwiki.php"; nocase; http_uri; content:"&text=|28 3A|pagelist order="; nocase; http_uri; reference:bugtraq,50776; reference:cve,2011-4453; holetype-id:102; ruletype:1; sid:11020166;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Snort Report Multiple Remote Command Execution Vulnerability"; flow:to_server,established; content:"snortreport-1.3.2/"; nocase; http_uri; pcre:"/snortreport\x2d1\.3\.2/(nmap|nbtscan)\.php?[^\r\n]+127\.0\.0\.1[^\r\n]+eval/iU"; reference:bugtraq,50031; holetype-id:102; ruletype:1; sid:11020167;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Support Incident Tracker (SiT!) Multiple Input Validation Vulnerability"; flow:to_server,established; content:"ftp_upload_file.php"; nocase; http_uri; reference:bugtraq,50632; reference:cve,2011-3829; reference:cve,2011-3833; holetype-id:102; ruletype:1; sid:11020168;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"JBoss Enterprise Application Platform Multiple Vulnerability"; flow:to_server,established; content:"/jmx-console/HtmlAdaptor"; nocase; content:"jboss.admin"; nocase; pcre:"/&name=jboss\.admin%3Aservice%3DDeploymentFileRepository&methodName=(store|remove)/i"; reference:bugtraq,39710; reference:cve,2010-0738; holetype-id:102; ruletype:1; sid:11020169;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"HP Operations Manager Remote Unauthorized Access Vulnerability"; flow:to_server,established; content:"deploy?path="; nocase; pcre:"/PUT( |\t)+/manager/(un)?deploy\?path=/i"; reference:bugtraq,37086; reference:cve,2009-3843; holetype-id:102; ruletype:1; sid:11020170;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Sun Java System Web Server WebDAV Unspecified Remote Buffer Overflow Vulnerability"; flow:to_server,established; content:"OPTIONS"; nocase; content:"/webdav"; nocase; content:"%eb%06%58%34%77%21%01%12%81%ec%60%fe%ff%ff%59%59%83%e9%3c%8a%01%3c%41%75%03%41%eb%f7%ff%e1"; reference:bugtraq,37874; reference:cve,2010-0361; holetype-id:102; ruletype:1; sid:11020171;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WikkaWiki Multiple Security Vulnerability"; flow:to_server,established; content:"wikka.php?wakka="; nocase; http_uri; content:"/addcomment"; nocase; http_uri; content:"User-Agent|3A| <?php"; nocase; reference:bugtraq,50866; reference:cve,2011-4451; holetype-id:102; ruletype:1; sid:11020172;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WebCalendar Local File Include And PHP Code Injection Vulnerability"; flow:to_server,established; content:"install/index.php"; nocase; http_uri; content:"app_settings=1&form_user_inc=user.php&form_single_user_login="; nocase; http_uri; pcre:"/form_single_user_login=[^\r\n]*(passthru|system|exec )\(/iU"; reference:bugtraq,53207; reference:cve,2012-1495; reference:cve,2012-1496; holetype-id:102; ruletype:1; sid:11020173;)
+
+alert tcp any any -> any any (msg:"Python SimpleXMLRPCServer Denial Of Service Vulnerability"; flow:to_server,established; content:"POST /RPC2"; nocase; content:"lol bye"; nocase; reference:bugtraq,51996; reference:cve,2012-0845; holetype-id:102; ruletype:1; sid:11020174;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"JBoss Enterprise Application Platform Multiple Vulnerability"; flow:to_server,established; content:"/HtmlAdaptor"; nocase; content:"action=invokeOpByName"; nocase; content:"name=jboss.system%3Aservice%3DMainDeployer"; nocase; pcre:"/MainDeployer[^\r\n]+arg0=http(%3A|:)(%2F|\/){2}[^\r\n]+(\.|%2E)war/i"; reference:bugtraq,39710; reference:cve,2010-0738; reference:cve,2007-1036; holetype-id:102; ruletype:1; sid:11020175;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft Windows WinHlp Item Buffer Overflow Vulnerability"; flow:established,to_client; content:"clsid|3a|adb880a6-d8ff-11cf-9377-00aa003b7a11"; nocase; content:"VALUE=|22|WinHelp|22 3e 3c|PARAM NAME=|22|Item1|22|"; nocase; pcre:"/PARAM NAME=\x22Item1\x22(\x0d)*(\x0a)*VALUE=\x27[^\x27\x0d\x0a]{215,}\x27\x3e/si"; reference:bugtraq,4857; reference:cve,2002-0823; holetype-id:102; ruletype:1; sid:11020176;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS00-058)Microsoft IIS 5.0 Trans Source Disclosure Vulnerability"; flow:established,to_server; content:"|0d 0a|Translate: f|0d 0a|"; nocase; pcre:"/^GET[ \t]+.*\x5c[ \t]+HTTP\/1\x2e(0|1)\x0d\x0a/i"; reference:bugtraq,1578; reference:cve,2000-0778; reference:ms,00-058; holetype-id:102; ruletype:1; sid:11020177;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS UNC Path Disclosure Vulnerability"; flow:established,to_server; content:"/iissamples/issamples/query."; nocase; pcre:"/^GET[ \t]+.*\/iissamples\/issamples\/query\.(idq|idq|htx)[ \t]+HTTP\/1\x2e(0|1)\x0d\x0a/i"; reference:bugtraq,1605; holetype-id:102; ruletype:1; sid:11020178;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS WebDAV Denial of Service Vulnerability"; flow:established,to_server; content:"SEARCH /"; nocase; pcre:"/^SEARCH /.*[ \t]+HTTP\/1\x2e(0|1)[\x0d\x0a]+[\x00-\xff]*<D\x3asearchrequest xmlns\x3aD=\x22DAV\x3a\x22>[\x00-\xff]*\x28\x22[^\x28\x29]{900}/i"; reference:bugtraq,1605; reference:cve,2001-0508; holetype-id:102; ruletype:1; sid:11020179;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS12-040)Microsoft Dynamics AX Enterprise Portal XSS Vulnerability"; flow:to_server,established; content:"/Purchase/Enterprise Portal/default.aspx?WMI="; nocase; http_uri; pcre:"/\/Purchase\/Enterprise Portal\/default\.aspx\?WMI=[^\r\n]+&WCMP=[^\r\n]+<script>[^\r\n]+</script>/iU"; reference:bugtraq,53863; reference:cve,2012-1857; reference:ms,12-040; holetype-id:102; ruletype:1; sid:11020180;)
+
+alert tcp any any -> any 8899,$HTTP_PORTS (msg:"Oracle VM Remote Code Execution Vulnerability"; flow:to_server,established; content:"utl_test_url"; nocase; pcre:"/<methodCall>.*<methodName>\s*utl_test_url\s*<\/methodName>.*<params>\s*<param>.+<value><string>.+\x27\x3b.+\x3b\x27/is"; reference:bugtraq,44047; reference:cve,2010-3585; holetype-id:102; ruletype:1; sid:11020181;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"VBulletin Misc.PHP Arbitrary PHP Script Code Execution Vulnerability"; flow:to_server,established; content:"misc.php?do="; nocase; http_uri; pcre:"/&template=\{\$\{(passthru|system|exec)[ \t]*\(/iU"; reference:bugtraq,12622; reference:cve,2005-0511; holetype-id:102; ruletype:1; sid:11020182;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"WordPress Cookie Data PHP Code Injection Vulnerability"; flow:to_server,established; content:"cache_lastpostdate[server]="; nocase; content:"parse_str"; nocase; pcre:"/Cookie:\s*[^\r\n]+cache_lastpostdate\[server\]=/is"; reference:bugtraq,14533; reference:cve,2005-2612; holetype-id:102; ruletype:1; sid:11020183;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHPBB Viewtopic.PHP PHP Script Injection Vulnerability"; flow:to_server,established; content:"viewtopic.php?"; nocase; http_uri; pcre:"/highlight=.*(passthru|system|exec|phpinfo)\(/iU"; reference:bugtraq,10701; reference:bugtraq,14086; reference:cve,2004-1315; reference:cve,2005-2086; holetype-id:102; ruletype:1; sid:11020184;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHPMyAdmin Setup.php PHP Code Injection Vulnerability"; flow:to_server,established; content:"/phpMyAdmin/scripts/setup.php"; nocase; http_uri; content:"&action=save&configuration="; nocase; http_uri; reference:bugtraq,34236; reference:cve,2009-1151; holetype-id:102; ruletype:1; sid:11020185;)
+
+alert tcp any any -> any 1220 (msg:"Apple QuickTime/Darwin Streaming Server Command Execution Vulnerability"; flow:to_server,established; content:"parse_xml.cgi"; nocase; pcre:"/filename=[^\x7c]+(%7C|\x7c)/i"; reference:bugtraq,6954; reference:cve,2003-0050; holetype-id:102; ruletype:1; sid:11020186;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"AWStats Remote Command Execution Vulnerability"; flow:to_server,established; content:"awstats.pl?"; nocase; http_uri; pcre:"/awstats\.pl\?(configdir|pluginmode|loadplugin|noloadplugin)=\|[^\r\n]+\|/iU"; reference:bugtraq,12298; reference:cve,2005-0116; holetype-id:102; ruletype:1; sid:11020187;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"AWStats Remote Arbitrary Command Execution Vulnerability"; flow:to_server,established; content:"awstats.pl?"; nocase; http_uri; pcre:"/awstats\.pl\?migrate=\|[^\r\n]+\|/iU"; reference:bugtraq,17844; reference:cve,2006-2237; holetype-id:102; ruletype:1; sid:11020188;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"AWStats Totals Sort Parameter Remote Command Execution Vulnerability"; flow:to_server,established; content:"awstatstotals.php?sort="; nocase; http_uri; pcre:"/awstatstotals\.php\?sort=[^\r\n]+(passthru|system|exec|phpinfo)[ \t]*\(/iU"; reference:bugtraq,30856; reference:cve,2008-3922; holetype-id:102; ruletype:1; sid:11020189;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Basic Analysis And Security Engine Multiple Remote File Include Vulnerability"; flow:to_server,established; content:".php?BASE_path="; nocase; http_uri; pcre:"/(base_qry_common|base_stat_common|base_include\.inc)\.php\?BASE_path=\s*http:\//iU"; reference:bugtraq,18298; reference:cve,2006-2685; holetype-id:102; ruletype:1; sid:11020190;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"CakePHP Unserialize() PHP Code Execution Vulnerability"; flow:to_server,established; content:"data[_Token][key]"; nocase; http_uri; content:"&data[_Token][fields]"; nocase; http_uri; content:"&_method=POST"; nocase; http_uri; reference:cve,2010-4335; holetype-id:102; ruletype:1; sid:11020191;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Coppermine Photo Gallery Multiple Remote Command Execution Vulnerability"; flow:to_server,established; content:"picEditor.php"; nocase; http_uri; content:"angle="; nocase; http_uri; pcre:"/angle=\d+\s+-quiet[^\\\x27]+&quality=/iU"; reference:bugtraq,27512; reference:cve,2008-0506; holetype-id:102; ruletype:1; sid:11020192;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Dogfood CRM Mail Spell.php Remote Command Execution Vulnerability"; flow:to_server,established; content:"spell.php"; nocase; http_uri; pcre:"/data\s*=\s*\$\s*\(.+&\)x/isU"; holetype-id:102; ruletype:1; sid:11020193;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Generic Web Application Unix Command Execution Vulnerability"; flow:to_server,established; content:"/cgi-bin/generic?cmd="; nocase; http_uri; holetype-id:102; ruletype:1; sid:11020194;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Mambo Cache_Lite Class MosConfig_absolute_path Remote File Include Vulnerability"; flow:to_server,established; content:"/Cache/Lite/Output.php?mosConfig_absolute_path=http|3A|/"; nocase; http_uri; reference:bugtraq,29716; reference:cve,2008-2905; holetype-id:102; ruletype:1; sid:11020195;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Mitel Audio And Web Conferencing XSL Parameter Arbitrary Command Injection Vulnerability"; flow:to_server,established; content:"awcuser/cgi-bin/vcs"; nocase; http_uri; content:"xsl="; nocase; http_uri; holetype-id:102; ruletype:1; sid:11020196;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Nagios Statuswml.cgi Remote Arbitrary Shell Command Injection Vulnerability"; flow:to_server,established; content:"/statuswml.cgi"; nocase; http_uri; pcre:"/\/statuswml\.cgi.+(ping|Traceroute)\s*=/is"; reference:bugtraq,35464; reference:cve,2009-2288; holetype-id:102; ruletype:1; sid:11020197;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"XML-RPC For PHP Remote Code Injection Vulnerability"; flow:to_server,established; content:"<methodCall>"; nocase; content:"<methodName>"; nocase; pcre:"/<methodCall>.*<methodName>.+<\/methodName>.*<params>.*<param>.*<name>.+[\x22\x27,\)]+\)\x3b.*(passthru|system|exec)\(/is"; reference:bugtraq,14088; reference:cve,2005-1921; reference:cve,2005-2116; holetype-id:102; ruletype:1; sid:11020198;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Redmine Multiple Vulnerability"; flow:to_server,established; content:"repository/annotate?rev="; nocase; http_uri; reference:bugtraq,45571; reference:cve,2011-4927; reference:cve,2011-4928; reference:cve,2011-4929; holetype-id:102; ruletype:1; sid:11020199;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"TikiWiki Tiki-Graph_Formula.PHP Code Injection Vulnerability"; flow:to_server,established; content:"/tiki-graph_formula.php?"; nocase; http_uri; pcre:"/&f\[\]=[^\r\n]+(passthru|system|exec)\(/iU"; reference:bugtraq,26006; reference:cve,2007-5423; holetype-id:102; ruletype:1; sid:11020200;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Trixbox LangChoice Arbitrary Script Injection Vulnerability"; flow:to_server,established; content:"/user/index.php"; nocase; http_uri; pcre:"/langChoice=.+\x00/iU"; reference:bugtraq,30135; reference:cve,2008-6825; holetype-id:102; ruletype:1; sid:11020201;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"TWiki Search Shell Metacharacter Remote Arbitrary Command Execution Vulnerability"; flow:to_server,established; content:"WebSearch?search="; nocase; http_uri; pcre:"/WebSearch\?search=[^\r\n]*\x27\x3b[^\r\n\x27]+\x3b\x23\x27/iU"; reference:bugtraq,11674; reference:cve,2004-1037; holetype-id:102; ruletype:1; sid:11020202;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Multiple NULL Pointer Dereference Denial Of Service Vulnerability"; flow:to_server,established; content:"wddx_serialize_"; nocase; pcre:"/wddx_serialize_(value|vars)\s*\(\s*new\s+Variant\s*\(/i"; reference:bugtraq,53643; holetype-id:102; ruletype:1; sid:11020203;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Multiple NULL Pointer Dereference Denial Of Service Vulnerability"; flow:to_server,established; content:"stream_bucket_"; nocase; pcre:"/stream_bucket_(append|prepend)\s*\(\s*[^\r\n,]+,\s*new\s*Variant\(/i"; reference:bugtraq,53643; holetype-id:102; ruletype:1; sid:11020204;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Com_event_sink() Function Arbitrary Code Execution Vulnerability"; flow:to_server,established; content:"com_event_sink"; nocase; pcre:"/com_event_sink\s*\(\s*new\s*Variant\s*\(/i"; reference:bugtraq,53642; holetype-id:102; ruletype:1; sid:11020205;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"ActiveCollab Chat Module Arbitrary PHP Code Execution Vulnerability"; flow:to_server,established; content:".php?path_info=chat/add_message&async=1"; nocase; http_uri; pcre:"/submitted=submitted&message\[message_text\]\s*=\s*<th>[\x22\x27]\)\x3b\{\s*\$\s*\{\s*(passthru|system|exec|eval)/iU"; reference:bugtraq,53624; holetype-id:102; ruletype:1; sid:11020206;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Com_print_typeinfo() Remote Code Execution Vulnerability"; flow:to_server,established; content:"com_print_typeinfo"; nocase; pcre:"/(\$\w+\s*=\s*new\s+VARIANT\([^}>]{0,100}com_print_typeinfo\s*\(|com_print_typeinfo\s*\(\s*new\s*VARIANT\s*\()/is"; reference:bugtraq,53621; holetype-id:102; ruletype:1; sid:11020207;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Oracle mod_wl HTTP POST Request Remote Buffer Overflow Vulnerability"; flow:to_server,established; content:"/index.jsp"; nocase; http_uri; content:"Content-Length|3A| 0"; nocase; pcre:"/\/index\.jsp\s*[0-9a-zA-Z]{7000}/iU"; reference:bugtraq,30273; reference:cve,2008-3257; holetype-id:102; ruletype:1; sid:11020208;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Apache_request_headers() Function Buffer Overflow Vulnerability"; flow:to_server,established; content:"HTTP_X_"; nocase; pcre:"/HTTP_X_\w{4}:[^\x00\x0d\x0a\x5f\x80\x8e\x9e\x9f]{1332}/i"; reference:bugtraq,53455; reference:cve,2012-2329; holetype-id:102; ruletype:1; sid:11020209;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Drupal Core Path Disclosure Vulnerability"; flow:to_server,established;  content:"?q[]="; nocase; http_uri; reference:bugtraq,50827; holetype-id:102; ruletype:1; sid:11020210;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Phar/tar.c Heap Buffer Overflow Vulnerability"; flow:to_server,established; content:"phar"; nocase; content:"tar"; nocase; pcre:"/\$\w+\s*=\s*new\s+Phar\s*\(.+\.tar.{0,10}\)\x3b/i"; reference:bugtraq,47545; reference:cve,2012-2386; holetype-id:102; ruletype:1; sid:11020211;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Struts ExceptionDelegator Component Parameter Parsing Remote Code Execution Vulnerability"; flow:to_server,established; content:"@java.lang.Runtime@getRuntime().exec("; nocase; http_uri; pcre:"/#_memberAccess\[[\x22\x27]allowStaticMethodAccess[\x22\x27]\]=true,@java\.lang\.Runtime@getRuntime\(\)\.exec\(/iU"; reference:cve,2012-0391; holetype-id:102; ruletype:1; sid:11020212;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft IIS $INDEX_ALLOCATION Data Stream Request Authentication Bypass Vulnerability"; flow:to_server,established; content:"|3A|$INDEX_ALLOCATION"; nocase; http_uri; pcre:"/\/\w+:(\$i\d+)?:\$INDEX_ALLOCATION\/\w+\.(php|asp|aspx)/iU"; holetype-id:102; ruletype:1; sid:11020213;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS02-065)Microsoft Data Access Components RDS Buffer Overflow Vulnerability"; flow:to_server,established; content:"/msadc/msadcs.dll/"; nocase; http_uri; pcre:"/Content-Type:[^\r\n]{136}/i"; reference:bugtraq,6214; reference:cve,2002-1142; reference:ms,02-065; holetype-id:102; ruletype:1; sid:11020214;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP PHP_register_variable_ex() Function Arbitrary Code Execution Vulnerability"; flow:to_server,established; content:"|00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 11 11 11 11 11 11 11 01 00 00 00 00 00 00 00 00 00|"; content:"Content-Disposition|3A| form-data|3B|"; nocase; pcre:"/Content-Disposition: form-data\x3b\s+name=[\x22\x27].+[\x22\x27]/is"; reference:bugtraq,51830; reference:cve,2012-0830; holetype-id:102; ruletype:1; sid:11020215;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS12-050)Microsoft SharePoint Scriptresx.ashx Cross Site Scripting Vulnerability"; flow:to_server,established; content:"_layouts/scriptresx.ashx?"; nocase; http_uri; pcre:"/_layouts\/scriptresx\.ashx\?[^\r\n]+&sections=[^\r\n]*<script>/iU"; reference:bugtraq,54312; reference:cve,2012-1859; reference:ms,12-050; holetype-id:102; ruletype:1; sid:11020216;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"(MS12-050)Microsoft SharePoint Cross Site Scripting Vulnerability"; flow:to_server,established; content:"/_vti_bin/owssvr.dll?"; nocase; http_uri; pcre:"/\/_vti_bin\/owssvr\.dll?[^\r\n]+query\.iqy&List[^\r\n]*<script>/iU"; reference:bugtraq,54316; reference:cve,2012-1863; reference:ms,12-050; holetype-id:102; ruletype:1; sid:11020217;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Sling Denial Of Service Vulnerability"; flow:to_server,established; content:"/?./@CopyFrom=../"; nocase; http_uri; reference:bugtraq,54341; reference:cve,2012-2138; holetype-id:102; ruletype:1; sid:11020218;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache APR Apr_fnmatch() Denia Of Service Vulnerability"; flow:to_server,established; content:"/?P=*?*?*?*?*?*?*?*?*?*?*?*?"; nocase; http_uri; reference:bugtraq,47820; reference:cve,2011-0419; holetype-id:102; ruletype:1; sid:11020219;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"TikiWiki information disclosure Vulnerability"; flow:established,to_server; content:"offset=0&sort_mode= HTTP/1."; nocase; reference:bugtraq,20858; reference:cve,2006-5702; holetype-id:102; ruletype:1; sid:11020220;)
+
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Tomcat Form Authentication Existing Or Non-Existing Username Enumeration Weakness"; flow:to_server,established; uricontent:"/j_security_check"; nocase; uricontent:"j_username="; nocase; content:"j_password=%"; nocase; reference:bugtraq,35196; reference:cve,2009-0580; holetype-id:102; ruletype:1; sid:11020221;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Acme THTTPD And MINI_HTTPD Terminal Escape Sequence in Logs Command Injection Vulnerability"; flow:to_server,established; uricontent:"]2|3B|owned"; nocase; pcre:"/(x1b|\x1b)\]2\;owned(\?)?(\x07\x0a|\x5cx07\x5cx0a)/iU"; reference:bugtraq,37714; reference:cve,2009-4490; reference:cve,2009-4491; holetype-id:102; ruletype:1; sid:11020222;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Lighttpd Http_auth.c Remote Denial Of Service Vulnerability"; flow:to_server,established; content:"Authorization: Basic"; nocase; pcre:"/Authorization: Basic\s*(12[7-9]|1[3-9][0-9]|2[0-4][0-9]|25[0-5])+\x0d\x0a/i"; reference:bugtraq,50851; reference:cve,2011-4362; holetype-id:102; ruletype:1; sid:11020223;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Basilic DIFF.PHP Remote Command Execution Vulnerability"; flow:to_server,established; uricontent:"/Config/diff.php?file=&"; nocase; pcre:"/\/Config\/diff\.php\?file=&.+&new=1&old=2/iU"; reference:bugtraq,54234; holetype-id:102; ruletype:1; sid:11020224;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Versions Prior To 5.3.1 Multipart Form-data Denial Of Service Attack"; flow:to_server,established; content:"Content-Disposition:form-data|3B| name="; nocase; pcre:"/-+\w+\x0d\x0aContent-Disposition: form-data\; name=.+filename=.+Content-Disposition: form-data\; name=.+filename=/is"; reference:bugtraq,37079; reference:cve,2009-4017; holetype-id:102; ruletype:1; sid:11020225;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Microsoft .NET Framework Tilde Character Denial Of Service Vulnerability"; flow:to_server,established; uricontent:"/~"; uricontent:".AsPx?"; nocase; pcre:"/(\/~\d+){50}/iU"; holetype-id:102; ruletype:1; sid:11020226;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"DomsHttpd 1.0 Prior Remote Denial Of Service Vulnerability"; flow:to_server,established; content:"Referer|3A|"; nocase; pcre:"/Referer:\s*http:\/\/[^\r\n]{1300}/i"; holetype-id:102; ruletype:1; sid:11020227;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache MOD_ISAP Memory Corruption Vulnerability"; flow:to_server,established; uricontent:"/cgi-bin/"; nocase; uricontent:".dll"; nocase; pcre:"/\/cgi-bin\/\w+\.dll HTTP\/1\.[01]/i"; reference:bugtraq,38494; reference:cve,2010-0425; holetype-id:102; ruletype:1; sid:11020228;)
+
+
+alert tcp any any -> any 8000 (msg:"Apache Tomcat Transfer-Encoding Information Disclosure and Denial Of Service Vulnerabilities"; flow:established,to_server; content:"Transfer-Encoding: buffered"; nocase; reference:bugtraq,41544; reference:cve,2010-2227; holetype-id:102; ruletype:1; sid:11020229;)
+
+alert tcp any any -> any 1311 (msg:"Dell OpenManage Web Server POST Request Heap Overflow Vulnerability"; flow:established,to_server; content:"/servlet/LoginServlet?flag=true"; nocase; pcre:"/user=\w+&password=\w+&domain=\w+&application=.{650}/i"; reference:bugtraq,9750; reference:cve,2004-0331; holetype-id:102; ruletype:1; sid:11020230;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Ruby WEBrick::HTTP::DefaultFileHandler Denial of Service Vulnerability"; flow:established,to_server; content:"If-None-Match:"; nocase; pcre:"/If-None-Match:([ \t\w\s]*\x3d\x22\w*\x22){60}/i"; reference:cve,2008-3656;reference:bugtraq,30644; holetype-id:102; ruletype:1; sid:11020231;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Novell ZENworks Asset Management Remote Execution Vulnerability"; flow:established,to_server; content:"/rtrlet/catch"; nocase; http_uri; content:"Content-Disposition:"; nocase; content:"filename=|22|/../"; nocase; pcre:"/Content-Disposition\x3a[ \t]*form-data[^\r\n]\x22\/\.\.\//i"; reference:cve,2011-2653; reference:bugtraq,50966; holetype-id:102; ruletype:1; sid:11020232;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Simple Web Server Connection Header Buffer Overflow Vulnerability"; flow:established,to_server; content:"|81 C4 60|"; nocase; pcre:"/Connection: *\x81\xC4\x60\xF0\xFF\xFF[^\r\n\x00]{1024}/i"; holetype-id:102; ruletype:1; sid:11020233;)
+
+
+alert tcp any any -> any 10051 (msg:"ZABBIX Node_Process_Command() Remote Command Execution Vulnerability"; flow:established,to_server; content:"Command|AD|"; nocase; pcre:"/Command\xad\d+\xad\d{3}\xad\w+/i"; reference:bugtraq,37989; reference:cve,2009-4998; holetype-id:102; ruletype:1; sid:11020234;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"SquidGuard Long URL Handling Remote Denial Of Service Vulnerability"; flow:established,to_server; content:"|2F|_playlist|2F|playlist.xml?parm="; http_uri; nocase; pcre:"/\/_playlist\/playlist\.xml\?parm=[\d\.]+\?parm=[\d\.]+\?parm=[\d\.]+\?parm=[\d\.]+\?parm=[\d\.]+/iU"; reference:bugtraq,55291; holetype-id:102; ruletype:1; sid:11020235;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"SugarCRM Community Edition Multiple Information Disclosure Vulnerability"; flow:established,to_server; content:"|2F|sugarcrm|2F|vcal_server.php?type"; http_uri; nocase; pcre:"/\/sugarcrm\/vcal_server\.php\?type[ \t]*=[ \t]*vfb&amp\x3b(email[ \t]*=[ \t]*[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+|user_name[ \t]*=[ \t]*\w+)/iU"; reference:bugtraq,55347; holetype-id:102; ruletype:1; sid:11020236;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"SugarCRM Community Edition Multiple Information Disclosure Vulnerability"; flow:established,to_server; content:"|2F|sugarcrm|2F|ical_server.php?type"; http_uri; nocase; pcre:"/\/sugarcrm\/ical_server\.php\?type[ \t]*=[ \t]*ics&amp\x3bkey[ \t]*=[ \t]*&amp\x3b(email[ \t]*=[ \t]*[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+|user_name[ \t]*=[ \t]*\w+)/iU"; reference:bugtraq,55347; holetype-id:102; ruletype:1; sid:11020237;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Apache Struts Remote Command Execution And Arbitrary File Overwrite Vulnerability"; flow:established,to_server; content:"java.io.FileWriter"; http_uri; nocase; pcre:"/=[ \t]*[^\r\n]+\.\w+&x\[new[^\r\n\w]java\.io\.FileWriter\(\w+\)\][ \t]*=/iU"; reference:bugtraq,51257; reference:cve,2012-0393; holetype-id:102; ruletype:1; sid:11020238;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Wiki Web Help Configpath Parameter Remote File Include Vulnerability"; flow:established,to_server; content:"/wwh/pages/links.php?configpath"; http_uri; nocase; pcre:"/\/wwh\/pages\/links\.php\?configpath[ \t]*=[ \t]*http:\//iU"; reference:bugtraq,55387; holetype-id:102; ruletype:1; sid:11020239;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP Header() HTTP Header Injection Vulnerability"; flow:established,to_server; content:".php|0D|Set-Cookie|3A|"; http_uri; nocase; reference:bugtraq,55297; reference:cve,2011-1398; holetype-id:102; ruletype:1; sid:11020242;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"JBoss Console/Web Management Direct Request Authentication Bypass Vulnerability"; flow:established,to_server; content:"jboss.admin|3A|service=DeploymentFileRepository"; nocase; reference:cve,2007-1036; holetype-id:102; ruletype:1; sid:11020243;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PHP-CGI Information Disclosure Vulnerability"; flow:to_server,established; content:"?-"; nocase; http_uri; pcre:"/(\/|(\.php))\?-[sn] HTTP/1.[01]/i"; reference:bugtraq,53388; reference:cve,2012-1823; holetype-id:102; ruletype:1; sid:11020244;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PhpMyAdmin Server_sync.php Backdoor Vulnerability"; flow:to_server,established; uricontent:"/server_sync.php"; nocase; pcre:"/c=.+\(.+\)/iU"; reference:cve,2012-5159; reference:bugtraq,55672; holetype-id:102; ruletype:1; sid:11020245; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"PhpTax Remote Arbitrary Command Execution Vulnerablility"; flow:to_server,established; uricontent:"drawimage.php"; nocase; pcre:"/\/drawimage\.php\?pfilez\s*=.+\;/i"; reference:bugtraq,55759; holetype-id:102; ruletype:1; sid:11020246; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"NextBBS Authentication Bypass Vulnerability"; flow:to_server,established; uricontent:"nextBBS"; nocase; uricontent:"userkey"; nocase; pcre:"/Cookie:[+\s]*nextBBS.+s:7\:"userkey"\;b:1\;\}/iU"; reference:cve,2012-1602; reference:bugtraq,52728; holetype-id:102; ruletype:1; sid:11020247; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Avaya IP Office Customer Call Reporter ImageUpload.ashx Remote Command Execution Vulnerability"; flow:to_server,established; content:"RadUAG_fileName"; nocase; pcre:"/Content-Disposition: form-data\; name="RadUAG_fileName"\s+\w+\.aspx/i"; reference:cve,2012-3811; reference:bugtraq,54225; holetype-id:102; ruletype:1; sid:11020248; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"Webmin Remote Command Execution Vulnerability"; flow:to_server,established; uricontent:"/file/show.cgi"; nocase; pcre:"/\/file\/show\.cgi\/[\w\/]+\|.+\|/iU"; reference:cve,2012-2982; reference:bugtraq,55446; holetype-id:102; ruletype:1; sid:11020249; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"TinyWebGallery Remote Command Execution Vulnerability"; flow:to_server,established; uricontent:"/filefunctions.inc?command="; nocase; reference:cve,2012-5347; reference:bugtraq,51325; holetype-id:102; ruletype:1; sid:11020250; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"TinyWebGallery Remote Command Execution Vulnerability"; flow:to_server,established; uricontent:"/info.php?command="; nocase; pcre:"/\/info\.php\?command=.+\;/iU"; reference:cve,2012-5347; reference:bugtraq,51325; holetype-id:102; ruletype:1; sid:11020251; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"JBOSS Worm Vulnerability"; flow:to_server,established; uricontent:"/zecmd/zecmd.jsp?comment="; nocase; pcre:"/\/zecmd\/zecmd\.jsp\?comment=[+\s]*(perl|wget|tftp|cmd|netstat)/iU"; reference:cve,2010-0738; holetype-id:102; ruletype:1; sid:11020252; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"JBOSS Worm Vulnerability"; flow:to_server,established; uricontent:"/idssvc/idssvc.jsp?comment="; nocase; pcre:"/\/idssvc\/idssvc\.jsp\?comment=[+\s]*(perl|wget|tftp|cmd|netstat)/iU"; reference:cve,2010-0738; holetype-id:102; ruletype:1; sid:11020253; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"JBOSS Worm Vulnerability"; flow:to_server,established; uricontent:"/iesvc/iesvc.jsp?comment="; nocase; pcre:"/\/iesvc\/iesvc\.jsp\?comment=[+\s]*(perl|wget|tftp|cmd|netstat)/iU"; reference:cve,2010-0738; holetype-id:102; ruletype:1; sid:11020254; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"SilverStripe BackURL Parameter URI Redirection Vulnerability"; flow:to_server,established; uricontent:"/login?BackURL="; pcre:"/\/index\.php\/Security\/login\?BackURL=[+\s]*http/iU"; reference:bugtraq,55915; holetype-id:102; ruletype:1; sid:11020255; rev:1;)
+
+alert tcp any any -> any $HTTP_PORTS (msg:"FileBound On-Site Password Reset Security Bypass Vulnerability"; flow:to_server,established; uricontent:"<fil|3A|UserID>"; pcre:"/\/Filebound\.asmx\?op=[+\s]*SetPassword2.+<fil:UserID>\d+<\/fil:UserID>/isU"; reference:bugtraq,55880; holetype-id:102; ruletype:1; sid:11020256; rev:1;)

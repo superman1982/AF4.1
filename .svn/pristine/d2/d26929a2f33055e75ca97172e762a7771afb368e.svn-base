@@ -1,0 +1,50 @@
+Dec 16 15:48:52: Warning - secret file /etc/ppp/pap-secrets has world and/or group access
+Dec 16 15:48:52: Warning - secret file /etc/ppp/chap-secrets has world and/or group access
+Dec 16 15:48:52: CHAP authentication failed: I dont like you.  Go way.
+Dec 16 15:48:52: CHAP authentication failed
+Dec 16 15:48:52: Connection terminated.
+Dec 16 15:48:53: Exit.
+Dec 16 15:48:55: Plugin rp-pppoe.so loaded.
+Dec 16 15:48:55: RP-PPPoE plugin version 3.8p compiled against pppd 2.4.5
+Dec 16 15:48:55: pppd 2.4.5 started by root, uid 0
+Dec 16 15:48:55: Using interface ppp1
+Dec 16 15:48:55: Connect: ppp1 <--> /dev/pts/1
+Dec 16 15:48:56: Warning - secret file /etc/ppp/pap-secrets has world and/or group access
+Dec 16 15:48:56: Warning - secret file /etc/ppp/chap-secrets has world and/or group access
+Dec 16 15:48:56: CHAP authentication failed: I dont like you.  Go way.
+Dec 16 15:48:56: CHAP authentication failed
+Dec 16 15:48:56: Connection terminated.
+Dec 16 15:48:57: Exit.
+Dec 16 15:49:01: Plugin rp-pppoe.so loaded.
+Dec 16 15:49:01: RP-PPPoE plugin version 3.8p compiled against pppd 2.4.5
+Dec 16 15:49:01: pppd 2.4.5 started by root, uid 0
+Dec 16 15:49:01: Using interface ppp1
+Dec 16 15:49:01: Connect: ppp1 <--> /dev/pts/1
+Dec 16 15:49:02: Warning - secret file /etc/ppp/pap-secrets has world and/or group access
+Dec 16 15:49:02: Warning - secret file /etc/ppp/chap-secrets has world and/or group access
+Dec 16 15:49:02: CHAP authentication succeeded: Welcome to localhost.localdomain.
+Dec 16 15:49:02: CHAP authentication succeeded
+Dec 16 15:49:02: kernel does not support PPP filtering
+Dec 16 15:49:02: local  IP address 172.172.172.200
+Dec 16 15:49:02: remote IP address 172.172.172.100
+Dec 16 15:49:02: primary   DNS address 172.202.202.202
+Dec 16 15:49:02: secondary DNS address 202.96.134.133
+Dec 16 15:49:03: Terminating on signal 15
+Dec 16 15:49:03: Connect time 0.1 minutes.
+Dec 16 15:49:03: Sent 0 bytes, received 0 bytes.
+Dec 16 15:49:03: Connection terminated.
+Dec 16 15:49:04: Exit.
+Dec 16 15:49:06: Plugin rp-pppoe.so loaded.
+Dec 16 15:49:06: RP-PPPoE plugin version 3.8p compiled against pppd 2.4.5
+Dec 16 15:49:06: pppd 2.4.5 started by root, uid 0
+Dec 16 15:49:06: Using interface ppp1
+Dec 16 15:49:06: Connect: ppp1 <--> /dev/pts/1
+Dec 16 15:49:07: Warning - secret file /etc/ppp/pap-secrets has world and/or group access
+Dec 16 15:49:13: Warning - secret file /etc/ppp/chap-secrets has world and/or group access
+Dec 16 15:49:13: CHAP authentication succeeded: Welcome to localhost.localdomain.
+Dec 16 15:49:13: CHAP authentication succeeded
+Dec 16 15:49:13: kernel does not support PPP filtering
+Dec 16 15:49:13: local  IP address 172.172.172.200
+Dec 16 15:49:13: remote IP address 172.172.172.100
+Dec 16 15:49:13: primary   DNS address 172.202.202.202
+Dec 16 15:49:13: secondary DNS address 202.96.134.133

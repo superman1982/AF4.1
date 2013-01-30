@@ -1,0 +1,21 @@
+# coding: utf-8
+module DeviceConsole
+  module ServerProtection
+    module TamperHelper
+      def get_tamper_post_hash(key_hash,opt_type)
+        result_hash = {}
+        case opt_type
+        when :add
+          
+
+        end
+        data_hash = get_commond_data_hash(key_hash)
+
+      end
+
+      def get_commond_data_hash(hash)
+        
+      end
+    end
+  end
+end

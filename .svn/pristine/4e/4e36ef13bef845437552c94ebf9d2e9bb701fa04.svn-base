@@ -1,0 +1,251 @@
+=begin rdoc
+作用: 封装设备后台文件操作
+维护记录:
+维护人      时间                  行为
+gsj     2011-12-08              创建
+=end
+
+module DeviceBack
+
+
+=begin rdoc
+类名: 文件操作
+描述: 文件操作
+=end
+  class FileOperation < ATT::Base
+
+=begin rdoc
+关键字名: 检查配置文件
+描述: 检查DNSMapping配置文件的内容/etc/sinfor/fw/dns.ini,接口配置文件/etc/sinfor/fw/netconfigeth.ini,地址转换配置文件/etc/sinfor/fw/natrule.ini,vlan配置文件/etc/sinfor/fw/vlan.ini,区域配置文件/etc/sinfor/fw/zone.ini,接口联动配置文件/etc/sinfor/fw/portlinkage.ini
+参数:
+id=>devicename,name=>设备名称,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要操作的设备名称,与test_device.yml中的名称一致"
+id=>config_name,name=>配置文件,type=>s,must=>true,default=>"",value=>"DNSMapping|接口|地址转换|VLAN|区域|接口联动|WEB应用防护|自定义敏感信息|DLP排除IP|DLP排除URL|联动封锁IP",descrip=>"检查哪个配置文件,目前只支持DNSMapping/接口/地址转换/VLAN/区域/接口联动配置文件的检查"
+id=>record_key,name=>记录标识,type=>s,must=>false,default=>"name",value=>"{text}",descrip=>"配置文件中每条记录的唯一标识,即主键,默认是name"
+id=>item_value,name=>检查项和值,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要检查的字段和它的值,必须包含每条记录的唯一标识和其值,格式如'name=b',同时要检查多个项时,使用&分割,如'name=b&type=2&enable=0'"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|不支持的配置文件|检查项和值不包含记录标识|记录不存在",descrip=>""
+=end
+    def check_config_file_content(hash)
+      command = get_check_config_file_command( hash[:config_name] ) # 根据参数中的配置文件获取执行的命令
+      ssh_connection = ATT::TestDevice.new(hash[:devicename])
+      file_content = ssh_connection.exec_command(command)[1].to_s
+      check_config_file(file_content, hash[:config_name], hash[:record_key], hash[:item_value]) # 检查配置文件中的某些检查项的值是否与期望一致
+    end
+=begin rdoc
+关键字名: 检查子接口配置文件
+描述: 检查cat /etc/sinfor/fw/subport.ini的内容
+参数:
+id=>devicename,name=>设备名称,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要操作的设备名称,与test_device.yml中的名称一致"
+id=>subport_name,name=>子接口名称,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要检查的子接口的名称,如eth1.2"
+id=>item_value,name=>检查项和值,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要检查的字段和它的值,格式如'name=b',同时要检查多个项时,使用&分割,如'name=b&type=2&enable=0'"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|记录不存在",descrip=>""
+=end
+    def check_subport_config_file(hash)
+      command = "cat /etc/sinfor/fw/subport.ini"
+      ssh_connection = ATT::TestDevice.new(hash[:devicename])
+      file_content = ssh_connection.exec_command(command)[1].to_s
+      check_subport_config(file_content, hash[:subport_name], hash[:item_value]) # 检查配置文件中的某些检查项的值是否与期望一致
+    end
+    
+=begin rdoc
+关键字名: 检查设备文件内容
+描述: 检查普通文件中是否包含指定的文本内容
+参数: 
+id=>devicename,name=>设备名称,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要操作的设备名称,与test_device.yml中的名称一致"
+id=>file,name=>文件,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"检查哪个文件,必须带全路径,如/root/tcpdump.txt"
+id=>checkpoint,name=>检查点,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"检查指定的文件内是否包含该检查点,多个时使用&分割"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|检查点不存在|文件不存在",descrip=>""
+=end
+    def check_common_file_content(hash)
+      ssh_connection = ATT::TestDevice.new(hash[:devicename])
+      ls_result = ssh_connection.exec_command("ls #{hash[:file]}")[1].to_s
+      return_fail("文件不存在") if ls_result.include?("No such file or directory")
+      file_content = ssh_connection.exec_command("cat #{hash[:file]}")[1].to_s
+      ATT::KeyLog.info("文件#{hash[:file]}的内容是:\n#{file_content}")
+      unless hash[:checkpoint].empty?
+        check_point_array = hash[:checkpoint].to_s.split("&")
+        check_point_array.each do |point|
+          if file_content.include?(point)
+            ATT::KeyLog.info("文件#{hash[:file]}包含检查点:#{point}")
+          else
+            ATT::KeyLog.info("不包含检查点:#{point}")
+            return_fail("检查点不存在")
+          end
+        end
+      end
+      return_ok
+    end
+
+=begin rdoc
+关键字名: 下载后台文件
+描述: 连接设备后台,下载指定的后台文件,返回保存到本地的全路径(包括文件名)
+参数:
+id=>name,name=>设备名称,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要操作的设备名称,与test_device.yml中的名称一致"
+id=>file,name=>文件,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"带全路径的文件名称,如/etc/sinfor/fw/hole_library.ini"
+id=>local_dir,name=>本地路径,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"本地下载路径,默认是项目的temp目录下"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败",descrip=>"期望结果"
+=end
+    def download_file(hash)
+      file = hash[:file]
+      ATT::KeyLog.info("要下载的文件是:#{file}")
+      file_name = File.basename(file)
+      device_connector = ATT::TestDevice.new(hash[:name])
+      
+      if hash[:local_dir].to_s.empty?
+        local_dir = Pathname.new(File.join(ATT::ConfigureManager.root, "temp")).realpath.to_s
+      else
+        local_dir = hash[:local_dir]
+      end
+      ATT::KeyLog.info("下载到本地路径:#{local_dir}")
+      download_value = false
+      begin
+        download_value = device_connector.download(file, local_dir.to_gbk) # 下载,下载成功返回true
+      rescue
+        ATT::KeyLog.error("发生异常:#{$!.class}/#{$!.message}.\n#{$!.backtrace.join("\n")}")
+        return_fail("失败")
+      end
+      if download_value
+        local_file_with_path = File.join(local_dir, file_name)
+        ATT::KeyLog.info("下载成功,文件保存为:#{local_file_with_path}")
+        return [ local_file_with_path ]
+      end
+    end
+
+=begin rdoc
+关键字名: 上传文件到后台
+描述: 上传某文件到设备后台指定目录下,从windows下上传来的文件,要用dos2unix将其转换成linux格式
+参数:
+id=>name,name=>设备名称,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要操作的设备名称,与test_device.yml中的名称一致"
+id=>local_file,name=>本地文件,type=>s,must=>true,default=>"",value=>"#{text}",descrip=>"要上传的本地文件,带全路径,如E:/AF3.0/temp/hole_library.ini"
+id=>dest_dir,name=>目的路径,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"上传文件到此路径下,如/etc/sinfor/fw/"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败",descrip=>"期望结果"
+=end
+    def upload_file(hash)
+      localfile = hash[:local_file]
+      dest_dir = hash[:dest_dir]
+      ATT::KeyLog.info("上传文件#{localfile}到设备的:#{dest_dir}路径下")
+      begin
+        device_connector = ATT::TestDevice.new(hash[:name])
+        device_connector.upload(localfile.to_gbk, dest_dir) # 上传文件
+      rescue Exception
+        ATT::KeyLog.error("发生异常:#{$!.class}/#{$!.message}.\n#{$!.backtrace.join("\n")}")
+        return_fail("失败")
+      end
+      return_ok
+    end
+
+=begin rdoc
+关键字名: 检查外网DOS防护策略配置
+描述: 检查/proc/net/wandos/rule文件内指定名称的外网DOS防护策略的配置是否正确
+参数:
+id=>devicename,name=>设备名称,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要操作的设备名称,与test_device.yml中的名称一致"
+id=>policy_name,name=>策略名称,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"外网DOS防护策略的名称"
+id=>icmpflood,name=>ICMP洪水攻击,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的ICMP洪水攻击的内容,如'1500[1]',为空时不进行检查"
+id=>udpflood,name=>UDP洪水攻击,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的UDP洪水攻击的内容,如'1800[1]',为空时不进行检查"
+id=>dnsflood,name=>DNS洪水攻击,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的DNS洪水攻击的内容,如'2800[1]',为空时不进行检查"
+id=>synflood,name=>SYN洪水攻击,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的SYN洪水攻击的内容,如'2000-3000-2500[1]',为空时不进行检查"
+id=>arpflood,name=>ARP洪水攻击,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的ARP洪水攻击的内容,如'800[1]',为空时不进行检查"
+id=>ipscan,name=>IP地址扫描,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的IP地址扫描的内容,如'1000[1]',为空时不进行检查"
+id=>portscan,name=>端口扫描,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的端口扫描的内容,如'12[1]',为空时不进行检查"
+id=>pktatk,name=>基于数据包攻击,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的基于数据包攻击的内容,如'ff',为空时不进行检查"
+id=>ipatk,name=>IP协议报文选项,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的IP协议报文选项的内容,如'7f',为空时不进行检查"
+id=>tcpatk,name=>TCP协议报文选项,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的TCP协议报文选项的内容,如'f',为空时不进行检查"
+id=>opflags,name=>检测攻击后操作,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"期望的检测攻击后操作的内容,如'1',为空时不进行检查"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|策略不存在",descrip=>"期望结果"
+=end
+    def check_wandos_config_file_content(hash)
+      command = "cat #{WANDOS_RULE_CONFIG}"
+      ssh_connection = ATT::TestDevice.new(hash[:devicename])
+      file_content = ssh_connection.exec_command(command)[1].to_s
+      current_line = 1
+      attr_array = []
+      file_content.each do | wandos_rule |
+        if current_line < 3 # 略过
+        elsif current_line == 3
+          attr_array = wandos_rule.split()
+        else
+          attr_value_array = wandos_rule.split()
+          if attr_value_array[0] == hash[:policy_name]
+            for index in 4..attr_value_array.size-1
+              attr_value = attr_value_array[index]
+              attr_name = attr_array[index]
+              attr_name_symbol = attr_name.to_sym
+              unless hash[attr_name_symbol].empty?
+                unless compare_attr_value(hash[attr_name_symbol], attr_value) # 返回true or false
+                  ATT::KeyLog.error("字段: #{attr_array[index]}的值错误,期望是:#{hash[attr_name_symbol]},实际是:#{attr_value}")
+                  return_fail #  所有进行检查的字段中,有一个字段的值与实际不相同
+                end
+              end
+            end
+            return_ok # 所有进行检查的字段的值与实际相同
+          end
+        end
+        current_line += 1
+      end
+      ATT::KeyLog.error("#{command}的结果是:#{file_content}\n,不包含名称是#{hash[:policy_name]}的外网DOS防护策略...")
+      return_fail("策略不存在")
+    end
+    
+=begin rdoc
+关键字名: 查看堆栈信息
+描述: 检查设备中是否有应用程序堆栈信息
+参数: 
+id=>devicename,name=>设备名称,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要操作的设备名称,与test_device.yml中的名称一致"
+id=>checkpoint,name=>检查点,type=>s,must=>false,default=>"任意",value=>"{text}",descrip=>"默认是'任意',特殊地可以检查某个进程名字对应的core文件,检查到返回成功,检查不到返回失败,多个之间用&隔开"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"失败",value=>"成功|失败",descrip=>""
+=end
+    def check_core_file_exist(hash)
+      ssh_connection = ATT::TestDevice.new(hash[:devicename])
+      begin
+        ls_result = ssh_connection.exec_command("ls /fwlog/bugreport/bugreportnew/")[1].to_s
+        return_fail if ls_result.length <= 3
+        return_ok if hash[:checkpoint] == "任意"  and ls_result.length > 3
+        unless hash[:checkpoint] == nil or hash[:checkpoint].empty?
+          check_point_array = hash[:checkpoint].to_s.split("&")
+          check_point_array.each do |point|
+            if ls_result.include?(point)
+              ATT::KeyLog.info("查看Core文件结果 ::#{ls_result} 中含检查点:#{point}")
+            else
+              ATT::KeyLog.info("查看Core文件结果 ::#{ls_result} 中 \n<<不>> 含检查点:#{point}")
+              return_fail
+            end
+          end
+        end
+        return_ok
+      ensure
+        ssh_connection.close
+      end
+    end
+
+=begin rdoc
+关键字名: 查看进程异常重启信息
+描述: 检查设备中是否有应用程序异常重启信息
+参数: 
+id=>devicename,name=>设备名称,type=>s,must=>true,default=>"",value=>"{text}",descrip=>"要操作的设备名称,与test_device.yml中的名称一致"
+id=>checkpoint,name=>检查点,type=>s,must=>false,default=>"任意",value=>"{text}",descrip=>"默认是'任意',特殊地可以检查某个进程名字对应的应用程序异常重启信息,检查到返回成功,检查不到返回失败,多个之间用&隔开"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"失败",value=>"成功|失败",descrip=>""
+=end
+    def check_rlog_exist(hash)
+      ssh_connection = ATT::TestDevice.new(hash[:devicename])
+      begin
+        log_rlog = ssh_connection.exec_command("tail -n 80 /var/log/rlog.txt")[1].to_s
+        rlog = ssh_connection.exec_command("tail -n 80 /var/rlog.txt")[1].to_s
+        return_fail if log_rlog.length <= 3 and rlog.length <=3
+        return_ok if hash[:checkpoint] == "任意"  and log_rlog.length > 3
+        unless hash[:checkpoint] == nil or hash[:checkpoint].empty?
+          check_point_array = hash[:checkpoint].to_s.split("&")
+          check_point_array.each do |point|
+            if log_rlog.include?(point) or rlog.include?(point)
+              ATT::KeyLog.info("查看log_rlog 或 rlog文件结果 :: log_rlog :\n#{log_rlog}\n rlog :\n #{log_rlog} 中包含检查点:#{point}")
+            else
+              ATT::KeyLog.info("查看log_rlog 或 rlog文件结果 :: log_rlog :\n#{log_rlog}\n rlog :\n #{log_rlog} 中 \n<<不>> 含检查点:#{point}")
+              return_fail
+            end
+          end
+        end
+        return_ok
+      end
+    ensure
+      ssh_connection.close
+    end
+  end
+end

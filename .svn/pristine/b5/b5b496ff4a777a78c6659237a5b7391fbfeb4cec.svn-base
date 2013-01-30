@@ -1,0 +1,7 @@
+# coding: utf8
+#可以在key前面加上':'，那么在引用时就可以直接使用symbol类型的key,如$a[:keyword][:hope]，若不加冒号，则为string类型的key,如$a['keyword']['hope']。
+
+:enable_disable_realtime_holdup_log_one:
+  :hope: 成功
+enable_disable_realtime_holdup_log_two:
+  :hope: 成功

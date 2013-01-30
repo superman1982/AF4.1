@@ -1,0 +1,117 @@
+# layer 3 topology
+# client1----eth1|----|
+# client2----eth2| AF |eth4----svr1
+# client3----eth3|----|
+# layer 2 topology
+# client ----eth3| AF |eth4---- server
+# coding: utf8
+
+# AF 1.0 案例高级配置
+ConsoleIP : 200.200.91.205
+ConsoleUser : admin
+ConsolePasswd : admin
+DeviceName : zwjAF
+LocalPcLinkName : 本地连接
+PC0InitialIP : 10.251.251.220
+PC1InitialIP : 10.251.251.223
+PC2InitialIP : 10.251.251.222
+PC3InitialIP : 10.251.251.224
+PC4InitialIP : 10.251.251.229
+PC5InitialIP : 10.251.251.221
+ADSLAccount : adsl1
+ADSLPasswd : test
+ADSLClientIP : 202.202.16.1
+SameNetIPWithADSLIP : 202.202.16.2
+ADSLAccount2 : adsl2
+ADSLPasswd2 : test
+ADSLConnectionName : AF拨号连接
+PPPOEDeviceName : PPPoEDevice
+StartPPPOECmd : killall pppoe-server; pppoe-server -I eth2 -L 202.202.16.254 -R 202.202.16.1 -N 20
+CloseFirewallCmd : /etc/init.d/fwserver stop
+# 测试使用的,物理接口使用的IP,可用来上外网
+StaticIPOnLine : 100.100.90.124/22
+GateWayOnLine : 100.100.91.251
+PcOneIPOnLine : 100.100.90.123
+PcMaskOnLine : 255.255.252.0
+NotExistedIP : 110.110.110.110
+DeviceSSHPort : 22345
+DeviceSSHUser : root
+DeviceSSHPasswd : 1
+ConsoleIP2 : 200.200.90.205
+DeviceName2 : szyAFLayer2
+FtpDomainName : www.afbvttest.com.cn
+FtpUser : anonymous
+FtpPasswd : 
+DnsServerOnLine : 202.96.134.133
+DataCenterPort : 85
+WanSmtpServer : smtp.126.com
+WanSmtpPort : 25
+WanSmtpServerDomain : 126.com
+WanMailUser : sangforafbvtuser
+WanMailPasswd : afbvt123456
+WanMailAccount : sangforafbvtuser@126.com
+WanPop3Server : pop3.126.com
+WanPop3Port : 110
+TianYaAddress : http\://www.tianya.cn
+TianYaUser : sangforafbvtuser
+TianYaPasswd : afbvt123456
+UpdaterLoginPasswd : sangfor
+MailServerSmtpPort : 25
+MailDomain : afbvt.com
+MailUser : afbvtuser1
+MailPasswd : abc
+MailSender : afbvtuser1@afbvt.com
+MailServerPop3Port : 110
+DomainNameNotExisted : www.sdoglahdfg.com
+# 3.0使用
+DeviceEth1IP : 192.168.21.1/24
+DeviceEth1Net : 192.168.21.0/24
+DeviceEth1Net2 : 192.168.21.0/255.255.255.0
+DeviceEth2IP : 192.168.22.1/24
+DeviceEth2Net : 192.168.22.0/24
+DeviceEth3IP : 192.168.23.1/24
+DeviceEth4IP : 178.178.178.1/24
+DeviceEth4Net : 178.178.178.0/24
+DeviceEth1IPNoMask : 192.168.21.1
+DeviceEth2IPNoMask : 192.168.22.1
+DeviceEth3IPNoMask : 192.168.23.1
+SendPacketNIC : 2
+WanServerIP : 178.178.178.25
+WanServerTCPPort : 8888
+WanServerUDPPort : 9999
+WanServerIP2 : 178.178.178.9
+WanServerIP3 : 178.178.178.10
+ICMPSourceIP1 : 192.168.21.9
+ICMPSourceIP2 : 192.168.21.10
+ICMPSourceIP3 : 192.168.21.11
+ICMPSourceIP4 : 192.168.22.9
+LanPc1IP : 192.168.21.27
+LanPc2IP : 192.168.22.28
+LanPc3IP : 192.168.23.29
+LocalPcLinkName : 本地连接
+DeviceEth4IPNoMask : 178.178.178.1
+BuiltInHolePath : /etc/sinfor/fw/sf_snort/rules_des_ini
+BuildInHoleConfigPath : /etc/sinfor/fw
+BuildWebHoleWebConfig : /etc/sinfor/fw/sf_snort/rules/
+RestartSnortServices : snort -c /etc/sinfor/fw/sf_snort/conf/snort.conf -t snort_in
+RestartSnortServicesResult : start success
+EnableSnortDebugModel : echo debug=1>/dev/sinfor/fw/snort_module
+EnablePcreDebugModel : echo debug=3>/dev/sinfor/fw/sf_pcre
+RepeatCase50464Rule1 : pcre\:"/(sangfor){1}/";
+RepeatCase50464Rule2 : pcre\:"/(sangfor){2}/";
+RepeatCase50489Rule1 : pcre\:"/\S{1}\s{2\,}\w{3\,4}\W+.[1-3]x?y*/";
+InsideHoleIDName1 : 1000604.desc
+InsideHoleIDSID1 : 1000604
+WanDosDenyConfig : /proc/net/wandos/sipdeny
+WinDumpExe : WinDump.exe
+ConsoleIP2 : 200.200.90.205
+DeviceName2 : szyAFLayer2
+SecDeviceVlanIP : 192.168.24.1/24
+SecWanPcIP : 192.168.24.30
+SecWanPc2IP : 192.168.24.32
+SecLanPcIP : 192.168.24.31
+SecDeviceVlanIPNoMask : 192.168.24.1
+Case50405Command1 : echo "" >> /etc/sinfor/fw/sf_snort/conf/snort.conf
+Case50405Command2 : echo "portvar MYPORT 81" >> /etc/sinfor/fw/sf_snort/conf/snort.conf;cat /etc/sinfor/fw/sf_snort/conf/snort.conf | grep MYPORT
+Case50405Command3 : cp /etc/sinfor/fw/sf_snort/conf/snort.conf /etc/sinfor/fw/sf_snort/conf/snort.conf.bak
+Case50405Command4 : mv /etc/sinfor/fw/sf_snort/conf/snort.conf.bak /etc/sinfor/fw/sf_snort/conf/snort.conf

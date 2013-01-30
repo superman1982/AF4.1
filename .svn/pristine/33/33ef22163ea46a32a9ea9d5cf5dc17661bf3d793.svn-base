@@ -1,0 +1,66 @@
+#require 'watir/win32ole'
+module AF
+  class AutoIt
+    @@AutoIt_instance = WIN32OLE.new("AutoItX3.Control")
+    # => 用来定义本类具有所有WIN32OLE的方法
+    def self.method_missing(name, *args,&block)
+      @@AutoIt_instance.send(name,*args,&block)
+    end
+
+    
+    # => 使用AutoItX3进行调用带窗口的程序
+    # program_path 相对项目的根目录而言的程序位置 (根目录由第三个参数的扩展hash里面的"base_path"键值对应的路径来确定
+    # wait_time 等待程序打开的超时时间,默认为20秒
+    # extern_hash 留作扩展使用的传参hash,其中的"base_path"键值被用作基础路径
+    # return 启动的进程ID , 启动的进程窗口句柄号
+    def self.autoitx_run_win_program(program_path,wait_time = 20,extern_hash = {"base_path" => ATT::ConfigureManager.root,"title" => ""})
+      extern_hash["base_path"] = ATT::ConfigureManager.root if extern_hash["base_path"] == nil or extern_hash["base_path"] == ""
+      path = File.join(extern_hash["base_path"],program_path)
+      base_name = File.basename(path, ".exe")
+      base_name = extern_hash["title"]  if extern_hash["title"] != ""
+      #path="#{$bin+"TcpClient.exe"}".to_utf8
+      processid = @@AutoIt_instance.run(path.to_utf8)
+      ATT::KeyLog.info("create process #{processid},path:: #{path}\n=*= basename #{base_name}/end")
+      if @@AutoIt_instance.WinWait(base_name,"",wait_time)==0
+        ATT::KeyLog.error("WinWait:#{base_name},等待超时")
+        return_fail "失败"
+      else
+        if @@AutoIt_instance.WinActivate(base_name) == 0
+          ATT::KeyLog.error("未发现程序#{base_name}启动窗口")
+          return_fail
+        end
+        # puts "#{win.getClassName}\t#{win.getWindowText}\t#{win.hwnd}"
+        win_list = @@AutoIt_instance.WinList(base_name)
+        win_list[0][0].times { |i|
+          hwnd = win_list[1][i+1]
+          ATT::KeyLog.info("handle :: #{hwnd}")
+          ATT::KeyLog.info("win_proccess : " + @@AutoIt_instance.WinGetProcess("[HANDLE:#{hwnd}]"))
+          if processid == @@AutoIt_instance.WinGetProcess("[HANDLE:#{hwnd}]").to_i
+            return [processid, hwnd]
+          end
+        }
+        ATT::KeyLog.error("没找到processid为#{processid}的窗口")
+        return_fail "失败"
+      end
+    end
+
+    # => 根据进程PID 以及 进程窗口的名字 name 定位具体的窗口句柄
+    # 如果pid是空或者空字符串,都将返回所有名字符合的窗口句柄
+    # 返回一个句柄数组
+    def self.get_hendles_by_pid_name(pid,name,&block)
+      handle_array = []
+      win_list = @@AutoIt_instance.WinList(name)
+      win_list[0][0].times { |i|
+        hwnd = win_list[1][i+1]
+        if pid == @@AutoIt_instance.WinGetProcess("[HANDLE:#{hwnd}]").to_i or pid == "" or pid == nil
+          handle_array << hwnd
+        end
+      }
+      ATT::KeyLog.debug("找不到pid为:#{pid} 且名字是:#{name}") if handle_array.length == 0
+      yield(handle_array) if block_given?
+      return handle_array
+    end
+
+
+  end
+end

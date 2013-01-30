@@ -1,0 +1,83 @@
+# encoding: utf-8
+=begin rdoc
+作用: 防篡改页面配置
+维护记录:
+维护人      时间                  行为
+[张文杰]     2012-12-19                     创建
+=end
+
+module DeviceConsole
+
+  module ServerProtection
+
+
+=begin rdoc
+类名: 网站篡改防护
+描述: 操作网站篡改防护的页面
+=end
+    class Tamper < ATT::Base
+
+=begin rdoc
+关键字名: 启禁防篡改功能
+描述: 启禁防篡改功能
+维护人: 张文杰
+参数:
+id=>enable_type,name=>操作类型,type=>s,must=>false,default=>"启用",value=>"启用|禁用",descrip=>"指定操作,是启用还是禁用"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>""
+=end
+      def enable_disable_tamper(hash={})
+        post_hash = {"opr" => "submitEnable","data" => {"enable" => hash[:enable_type] == "启用"}}
+        result_hash = AF::Login.get_session().post(TamperCGI, post_hash)
+        if result_hash["success"]
+          return_ok
+        else
+          ATT::KeyLog.info("启用或禁用防篡改功能..错误消息是#{result_hash["msg"]}")
+          return_fail
+        end
+      end
+
+=begin rdoc
+关键字名: 新增防篡改策略
+描述: 新增防篡改策略
+维护人: 王沃伦
+参数:
+id=>enable_type,name=>操作类型,type=>s,must=>false,default=>"启用",value=>"启用|禁用",descrip=>"指定操作,是启用还是禁用"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>""
+=end
+      def add_tamper_policy(hash={})
+        json_hash = get_add_tamper_hash(hash)
+        check_post_result(TamperCGI,json_hash,{"info" => "删除防篡改策略"})
+      end
+      
+=begin rdoc
+关键字名: 删除防篡改策略
+描述: 删除防篡改策略
+维护人: 王沃伦
+参数:
+id=>enable_type,name=>操作类型,type=>s,must=>false,default=>"启用",value=>"启用|禁用",descrip=>"指定操作,是启用还是禁用"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>""
+=end
+      def del_tamper_policy(hash={})
+        json_hash = get_del_tamper_hash(hash)
+        check_post_result(TamperCGI,json_hash,{"info" => "删除防篡改策略"})
+      end
+
+=begin rdoc
+关键字名: 修改防篡改策略
+描述: 修改防篡改策略
+维护人: 王沃伦
+参数:
+id=>enable_type,name=>操作类型,type=>s,must=>false,default=>"启用",value=>"启用|禁用",descrip=>"指定操作,是启用还是禁用"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>""
+=end
+      def edit_tamper_policy(hash={})
+        json_hash = get_edit_tamper_hash(hash)
+        check_post_result(TamperCGI,json_hash,{"info" => "删除防篡改策略"})
+      end
+      #end of class Tamper
+    end
+    #don't add any code after here.
+
+  end
+
+end

@@ -1,0 +1,3 @@
+GET / HTTP/1.0
+Cookie: name=UNION%20SELECT
+

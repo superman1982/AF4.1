@@ -1,0 +1,5 @@
+POST / HTTP/1.0
+Content-Type: image/GIF
+Content-Length: 16
+
+%u0074est62246_2

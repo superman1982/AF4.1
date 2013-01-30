@@ -1,0 +1,6 @@
+POST / HTTP/1.1
+Content-Length: 19
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla
+
+name=UNION%20SELECT

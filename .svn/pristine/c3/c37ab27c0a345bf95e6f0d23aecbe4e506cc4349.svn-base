@@ -1,0 +1,120 @@
+# encoding: utf-8
+=begin rdoc
+作用: 使用AutoIT的API来调用对应的程序来发包
+维护记录:
+维护人      时间                  行为
+[王沃伦]     2012-12-27                     创建
+=end
+require 'watir/win32ole'
+require 'json'
+require 'lib/util/autoit'
+
+module LocalPc
+
+  module NetworkAccess
+
+
+=begin rdoc
+类名: AutoIt发包
+描述: 使用AutoIT的API来调用对应的程序来发包
+=end
+    class AutoItSendPacket < ATT::Base
+
+=begin rdoc
+关键字名: TcpCilet发包
+描述: 调用TcpCilent发包
+维护人: 王沃伦
+参数:
+id=>dip,name=>目的ip,type=>s,must=>false,default=>"127.0.0.1",value=>"{text}",descrip=>"发包目的ip"
+id=>port,name=>目的端口,type=>s,must=>false,default=>"8888",value=>"{text}",descrip=>"发包目的端口"
+id=>size,name=>包大小,type=>s,must=>false,default=>"1400",value=>"1400|{text}",descrip=>"包大小,单位字节"
+id=>fastest,name=>是否最快,type=>s,must=>false,default=>"false",value=>"true|false",descrip=>"是否最快速度发包"
+id=>interval,name=>间隔,type=>s,must=>false,default=>"1000",value=>"1000|{text}",descrip=>"发包间隔,单位毫秒"
+id=>count,name=>次数,type=>s,must=>false,default=>"5",value=>"5|{text}",descrip=>"发包次数,间隔时间内的发包次数"
+id=>file,name=>数据位置,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"数据文件位置,放在data目录"
+id=>close,name=>完成关闭,type=>s,must=>false,default=>"false",value=>"true|false",descrip=>"完成后是否关闭"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果"
+=end
+      def tcpclient_send(hash={})
+        processid, handle = AF::AutoIt.autoitx_run_win_program(TCPClientPath)
+        tcp_send(hash,processid, handle)
+      end
+
+=begin rdoc
+关键字名: TcpCilet检查速度
+描述: 查看TcpClient的速度
+维护人: 王沃伦
+参数:
+id=>title,name=>窗口标题,type=>s,must=>false,default=>"TcpClient",value=>"{text}",descrip=>"窗口标题"
+id=>dip,name=>目的ip,type=>s,must=>false,default=>"127.0.0.1",value=>"{text}",descrip=>"发包目的ip"
+id=>port,name=>目的端口,type=>s,must=>false,default=>"8888",value=>"{text}",descrip=>"发包目的端口"
+id=>size,name=>包大小,type=>s,must=>false,default=>"1400",value=>"{text}",descrip=>"包大小"
+id=>fastest,name=>是否最快,type=>s,must=>false,default=>"false",value=>"true|false|{text}",descrip=>"是否最快速度发包"
+id=>interval,name=>间隔,type=>s,must=>false,default=>"1000",value=>"{text}",descrip=>"发包间隔,单位毫秒"
+id=>count,name=>次数,type=>s,must=>false,default=>"5",value=>"{text}",descrip=>"发包次数"
+id=>min_speed,name=>期望最小速度,type=>s,must=>false,default=>"5",value=>"{text}",descrip=>"期望最小速度,单位为KB/s"
+id=>max_speed,name=>期望最大速度,type=>s,must=>false,default=>"10",value=>"{text}",descrip=>"期望最大速度,单位为KB/s"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败",descrip=>"期望结果"
+=end
+      def tcpclient_check_speed(hash={})
+        check_tcpclient_speed(hash)
+      end
+
+=begin rdoc
+关键字名: 关闭TcpClient的窗口
+描述: 关闭TcpClient的窗口
+维护人: 王沃伦
+参数:
+id=>title,name=>窗口标题,type=>s,must=>false,default=>"TcpClient",value=>"{text}",descrip=>"要关闭的窗口标题"
+id=>dip,name=>目的ip,type=>s,must=>fault,default=>"127.0.0.1",value=>"{text}",descrip=>"发包目的ip"
+id=>port,name=>目的端口,type=>s,must=>fault,default=>"8888",value=>"{text}",descrip=>"发包目的端口"
+id=>size,name=>包大小,type=>s,must=>false,default=>"1400",value=>"{text}",descrip=>"包大小"
+id=>fastest,name=>是否最快,type=>s,must=>false,default=>"false",value=>"{text}",descrip=>"是否最快速度发包"
+id=>interval,name=>间隔,type=>s,must=>false,default=>"1000",value=>"{text}",descrip=>"发包间隔,单位毫秒"
+id=>count,name=>次数,type=>s,must=>false,default=>"5",value=>"{text}",descrip=>"发包次数"
+id=>file,name=>数据位置,type=>s,must=>false,default=>"",value=>"{text}",descrip=>"数据文件位置"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果"
+=end
+      def tcpclient_close_window(hash={})
+        close_tcpclient_window(hash)
+      end
+
+=begin rdoc
+关键字名: NewClient发UDP包
+描述: 调用NewClient发包
+维护人: 王沃伦
+参数:
+id=>dip,name=>目的ip,type=>s,must=>false,default=>"127.0.0.1",value=>"{text}",descrip=>"发包目的ip"
+id=>port,name=>目的端口,type=>s,must=>false,default=>"8888",value=>"{text}",descrip=>"发包目的端口"
+id=>size,name=>包大小,type=>s,must=>false,default=>"1400",value=>"{text}",descrip=>"包大小,单位字节"
+id=>interval,name=>间隔,type=>s,must=>false,default=>"1000",value=>"{text}",descrip=>"间隔,单位毫秒"
+id=>count,name=>次数,type=>s,must=>false,default=>"5",value=>"{text}",descrip=>"次数,间隔时间内的发包次数"
+id=>fastest,name=>是否最快,type=>s,must=>false,default=>"false",value=>"true|false",descrip=>"是否最快"
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败",descrip=>"期望结果"
+=end
+      def newClient_udp_send(hash={})
+        pid,hwnd = AF::AutoIt.autoitx_run_win_program(NewClientPath,10,{"title" => "TCP/UDP Testtool"})
+        newclient_send_udp(hash,hwnd)
+      end
+
+=begin rdoc
+关键字名: 关闭所有NewClient
+描述: 就是关闭所有的newClient程序窗口
+维护人: 王沃伦
+参数:
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败",descrip=>"期望结果"
+=end
+      def newClient_udp_close(hash={})
+        AF::AutoIt.close_window_by_pid_name(nil,"TCP/UDP Testtool") do |closed_array|
+          return_ok if closed_array.length >= 0
+          return_fail
+        end
+      end
+      
+      #end of class AutoItSendPacket
+    end
+    #don't add any code after here.
+
+  end
+
+end

@@ -1,0 +1,7 @@
+# coding: utf-8
+module DeviceConsole
+module FluxManager
+module VirtualLineHelper
+end
+end
+end

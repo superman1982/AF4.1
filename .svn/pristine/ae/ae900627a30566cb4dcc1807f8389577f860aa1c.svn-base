@@ -1,0 +1,6 @@
+# coding: utf8
+#测试套文件类型
+input_file: excel
+#存储关键字信息的文件类型
+check_file: xml
+#excel测试套存放相对路径（相对att文件夹）

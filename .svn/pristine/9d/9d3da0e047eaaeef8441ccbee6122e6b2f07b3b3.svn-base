@@ -1,0 +1,148 @@
+# 测试设备的一些配置,举例
+#testdevice :
+#  - name : one
+#    type : ssl
+#    host : 200.200.81.43
+#    port : 22345
+#    user : admin
+#    passwd : 1skyhappy
+#    dlancommand : dlancommand
+#    dlanpasswd : dlanrecover
+#    comm : sshd
+#
+#  - name : two
+#    type : ssl
+#    host : 200.200.81.43
+#    port : 22345
+#    user : admin
+#    passwd : 1skyhappy
+#    dlancommand : dlancommand
+#    dlanpasswd : dlanrecover
+#    comm : sshd
+
+testdevice :
+    # 一台测试设备,如果有多台设备,该名称必须唯一,写关键字时根据该名称操作对应的设备,
+    # 如果有多台设备(包括不同产品线),只需复制一份如下的配置,然后根据需要修改具体的值  
+  - name : zwjAF
+    # 测试设备所属的产品线
+    type : af
+    # 设备管理IP
+    host : 200.200.91.205
+    # 设备端口号
+    port : 22345
+    # 连接设备后台的用户
+    user : root
+    # 连接设备后台的密码
+    passwd : 1
+    # 使用dlan升级工具连接设备后执行命令需要的密码
+    dlancommand : dlancommand
+    # 使用dlan升级工具连接设备时的登录密码
+    dlanpasswd : admin
+    # 打开端口号要执行的命令
+    comm :
+    # 后台数据库的用户
+    db_user : root
+    # 后台数据库的密码
+    db_passwd : root
+    # 后台数据库的端口
+    db_port : 3306
+    # 后台数据库的名称
+    db_name : FW_LOG_fwlog
+    
+  - name : woolenAF
+    # 测试设备所属的产品线
+    type : af
+    # 设备管理IP
+    host : 200.200.91.104
+    # 设备端口号
+    port : 22345
+    # 连接设备后台的用户
+    user : root
+    # 连接设备后台的密码
+    passwd : 1
+    # 使用dlan升级工具连接设备后执行命令需要的密码
+    dlancommand : dlancommand
+    # 使用dlan升级工具连接设备时的登录密码
+    dlanpasswd : sangfor
+    # 打开端口号要执行的命令
+    comm :
+    # 后台数据库的用户
+    db_user : root
+    # 后台数据库的密码
+    db_passwd : root
+    # 后台数据库的端口
+    db_port : 3306
+    # 后台数据库的名称
+    db_name : FW_LOG_fwlog
+    
+  - name : szyAFLayer2
+    # 测试设备所属的产品线
+    type : af
+    # 设备管理IP
+    host : 200.200.90.205
+    # 设备端口号
+    port : 22345
+    # 连接设备后台的用户
+    user : root
+    # 连接设备后台的密码
+    passwd : 1
+    # 使用dlan升级工具连接设备后执行命令需要的密码
+    dlancommand : dlancommand
+    # 使用dlan升级工具连接设备时的登录密码
+    dlanpasswd : sangfor
+    # 打开端口号要执行的命令
+    comm :
+    # 后台数据库的用户
+    db_user : root
+    # 后台数据库的密码
+    db_passwd : root
+    # 后台数据库的端口
+    db_port : 3306
+    # 后台数据库的名称
+    db_name : FW_LOG_fwlog
+    
+  - name : PPPoEDevice
+    # 测试设备所属的产品线
+    type : wanacc
+    # 设备管理IP
+    host : 200.200.90.208
+    # 设备端口号
+    port : 22345
+    # 连接设备后台的用户
+    user : root
+    # 连接设备后台的密码
+    passwd : dlanrecover
+    # 使用dlan升级工具连接设备后执行命令需要的密码
+    dlancommand : dlancommand
+    # 使用dlan升级工具连接设备时的登录密码
+    dlanpasswd : dlanrecover
+    # 打开端口号要执行的命令
+    comm :
+  
+  - name : DHCP服务器设备
+    # 测试设备所属的产品线
+    type : ssl
+    # 设备管理IP
+    host : 200.200.90.209
+    # 设备端口号
+    port : 22
+    # 连接设备后台的用户
+    user : root
+    # 连接设备后台的密码
+    passwd : sinfors
+    # 使用dlan升级工具连接设备后执行命令需要的密码
+    dlancommand : dlancommand
+    # 使用dlan升级工具连接设备时的登录密码
+    dlanpasswd : dlanrecover
+    # 打开端口号要执行的命令
+    comm : sshftp
+    user : root
+    # 连接设备后台的密码
+    passwd : dlanrecover
+    # 使用dlan升级工具连接设备后执行命令需要的密码
+    dlancommand : dlancommand
+    # 使用dlan升级工具连接设备时的登录密码
+    dlanpasswd : dlanrecover
+    # 打开端口号要执行的命令
+    comm :
+  

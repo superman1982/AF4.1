@@ -1,0 +1,8 @@
+debug=enter debug mode
+log\:clear=Truncates all *.log files in log/ to zero bytes
+map=keyword map generate
+result\:clear=delete all files in result/
+run=Run the suite of all usecases that is specified by you. notice: please `rake server` before run me.
+run_all=Run all usecases in the folder of 'usecase'
+server=start att server that can run keyword one by one from remote or local
+test=Run all keywords test suites

@@ -1,0 +1,8 @@
+POST /test/index.asp?action=chk HTTP/1.1
+Content-Length: 40
+Content-Type: application/json
+User-Agent: Mozilla
+
+{
+  "name": "\u0055NION SE\u004cECT"
+}

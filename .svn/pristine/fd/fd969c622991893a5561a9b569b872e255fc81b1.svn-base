@@ -1,0 +1,99 @@
+# encoding: utf-8
+=begin rdoc
+作用: 请输入作用
+维护记录:
+维护人      时间                  行为
+[你的名字]     2012-12-24                     创建
+=end
+
+module DeviceConsole
+
+module FluxManager
+
+
+=begin rdoc
+类名: VirtualLine
+描述: 请输入描述
+=end
+class VirtualLine < ATT::Base
+
+=begin rdoc
+关键字名: add_vline
+描述: add_vline
+维护人: 请输入维护人
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+  def add_vline(hash={})
+  end
+
+=begin rdoc
+关键字名: del_vline
+描述: del_vline
+维护人: 请输入维护人
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+  def del_vline(hash={})
+  end
+
+=begin rdoc
+关键字名: edit_vline
+描述: edit_vline
+维护人: 请输入维护人
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+  def edit_vline(hash={})
+  end
+
+=begin rdoc
+关键字名: add_vline_rule
+描述: add_vline_rule
+维护人: 请输入维护人
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+  def add_vline_rule(hash={})
+  end
+
+=begin rdoc
+关键字名: del_vline_rule
+描述: del_vline_rule
+维护人: 请输入维护人
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+  def del_vline_rule(hash={})
+  end
+
+=begin rdoc
+关键字名: edit_vline_rule
+描述: edit_vline_rule
+维护人: 请输入维护人
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+  def edit_vline_rule(hash={})
+  end
+
+
+#end of class VirtualLine
+end
+#don't add any code after here.
+
+end
+
+end

@@ -1,0 +1,9 @@
+# coding: utf8
+# 报告的格式
+# 可支持多种格式,中间使用 '/' 来分隔
+# 以下会输出excel表格和pdf两种报告
+type: excel/pdf
+
+# 报告存在的位置
+# 一般无须改动
+report_dir: ./result

@@ -1,0 +1,24 @@
+# coding: utf8
+require 'rubygems'
+
+# if you want update every thing newer , please uncomment this code.
+#`bundle.bat update` rescue puts "bundle update failure! please check detail by `bundle update`."
+`bundle.bat check`
+if $? != 0
+  `bundle.bat install --system`
+  result = `bundle.bat check`
+  if $? != 0
+	puts "#{result}"
+	exit 1
+  end
+end
+
+require 'bundler/setup'
+Bundler.require(:default)
+
+require 'att'
+require 'att/tasks'
+
+ATT::ConfigureManager.root = File.dirname(__FILE__)
+ATT::PrivateConfigureManager.root = File.dirname(__FILE__)
+ATT::Tasks.load_tasks

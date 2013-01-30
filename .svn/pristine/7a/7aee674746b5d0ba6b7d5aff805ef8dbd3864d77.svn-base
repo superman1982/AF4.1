@@ -1,0 +1,3 @@
+GET / HTTP/1.0
+Authorization: Basic VGhpcyBpcyB0ZXN0IQ==
+

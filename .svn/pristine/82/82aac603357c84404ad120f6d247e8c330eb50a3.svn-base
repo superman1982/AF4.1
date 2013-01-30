@@ -1,0 +1,22 @@
+# coding: utf-8
+#可以在key前面加上':'，那么在引用时就可以直接使用symbol类型的key,如$a[:keyword][:hope]，若不加冒号，则为string类型的key,如$a['keyword']['hope']。
+
+:enable_disable_tamper_one:
+  :hope: 成功
+enable_disable_tamper_two:
+  :hope: 成功
+
+:new_tamper_policy_one:
+  :hope: 成功
+new_tamper_policy_two:
+  :hope: 成功
+
+:edit_tamper_policy_one:
+  :hope: 成功
+edit_tamper_policy_two:
+  :hope: 成功
+
+:del_tamper_policy_one:
+  :hope: 成功
+del_tamper_policy_two:
+  :hope: 成功

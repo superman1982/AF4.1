@@ -1,0 +1,15 @@
+# coding: utf8
+EnablePolicy: RunContinue
+CurrenRun: Example
+Example:
+     - 用户管理: 
+              - 用户认证
+              - 上网策略
+     - 用户管理xx: 
+              - 用户认证11
+              - 上网策略22
+RunContinue:
+  RunTimes: 1
+RunError:
+  RunTimes: 2
+RunDebug: false

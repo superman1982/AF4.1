@@ -1,0 +1,111 @@
+# encoding: utf-8
+=begin rdoc
+作用: 用作对应界面的流控虚拟线路配置相关操作
+维护记录:
+维护人      时间                  行为
+[王沃伦]     2012-12-24           创建
+=end
+
+module DeviceConsole
+
+  module FluxManager
+
+
+=begin rdoc
+类名: VirtualLine
+描述: 用作对应界面的流控虚拟线路配置相关操作
+=end
+    class VirtualLine < ATT::Base
+
+=begin rdoc
+关键字名: 添加虚拟线路
+描述: 添加虚拟线路
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def add_vline(hash={})
+        json_hash = get_add_vline_hash(hash)
+        check_post_result(FluxVlineCGI,json_hash,{"info" => "添加虚拟线路"})
+      end
+
+=begin rdoc
+关键字名: 删除虚拟线路
+描述: 删除虚拟线路
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def del_vline(hash={})
+        json_hash = get_del_vline_hash(hash)
+        check_post_result(FluxVlineCGI,json_hash,{"info" => "删除虚拟线路"})
+      end
+
+=begin rdoc
+关键字名: 编辑虚拟线路
+描述: 编辑虚拟线路
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def edit_vline(hash={})
+        json_hash = get_edit_vline_hash(hash)
+        check_post_result(FluxVlineCGI,json_hash,{"info" => "编辑虚拟线路"})
+      end
+
+=begin rdoc
+关键字名: 添加虚拟线路
+描述: 添加虚拟线路
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def add_vline_rule(hash={})
+        json_hash = get_add_vline_rule_hash(hash)
+        check_post_result(FluxVlineCGI,json_hash,{"info" => "添加虚拟线路"})
+      end
+
+=begin rdoc
+关键字名: 删除虚拟线路规则
+描述: 删除虚拟线路规则
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def del_vline_rule(hash={})
+        json_hash = get_del_vline_rule_hash(hash)
+        check_post_result(FluxVlineCGI,json_hash,{"info" => "删除虚拟线路规则"})
+      end
+
+=begin rdoc
+关键字名: 编辑虚拟线路规则
+描述: 编辑虚拟线路规则
+维护人: 王沃伦
+参数:
+# id=>英文名,name=>中文名,type=>s(tring)|a(array)|i(nt)|h(ash),must=>true|false,default=>"",value=>"{text}",descrip=>"这是一个例子"
+id=>nickname,name=>中文名,type=>s,must=>false,default=>"",value=>"{text}",descrip=>""
+id=>hope,name=>期望结果,type=>s,must=>false,default=>"成功",value=>"成功|失败|none",descrip=>"期望结果为'none'时,将略过期望结果检查,直接认为执行成功,请慎重使用"
+=end
+      def edit_vline_rule(hash={})
+        json_hash = get_edit_vline_rule_hash(hash)
+        check_post_result(FluxVlineCGI,json_hash,{"info" => "添加虚拟线路"})
+      end
+
+
+      #end of class VirtualLine
+    end
+    #don't add any code after here.
+
+  end
+
+end

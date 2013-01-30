@@ -1,0 +1,95 @@
+# coding: utf8
+# 公共库使用的常用的配置
+# 未使用的部分,可以不用填写
+# 你也可以使用完整的接口来避免公共库读取这里的配置
+
+# ATT::FTP
+ftp :
+    # ftp服务器IP
+    host : 
+    # 用户名
+    user : 
+    # 密码
+    passwd : 
+    # 端口号
+    port : 
+# ATT::HTTP
+http :
+    # http服务器IP
+    host : 
+    # 端口号
+    port : 
+    # 以下是使用http代理服务器时的配置
+    # 代理服务器IP
+    proxy_host : 
+    # 代理端口号
+    proxy_port : 
+    # 用户
+    proxy_user : 
+    # 密码
+    proxy_passwd : 
+#ATTP::HTTPS
+https :
+    # https服务器IP
+    host : 
+
+    # 端口号
+    port : 
+
+    # 以下是使用https代理服务器时的配置
+    # 代理服务器IP
+    proxy_host : 
+
+    # 代理端口号
+    proxy_port : 
+
+    # 用户
+    proxy_user : 
+
+    # 密码
+    proxy_passwd :
+
+mail :
+    # 邮件服务器IP
+    host : 200.200.88.201
+    # 发送邮件端口号
+    smtp_port : 25
+    # 接收邮件端口号
+    pop_port : 110
+    # 连接邮件服务器的用户
+    user : afbvtuser1
+    # 连接邮件服务器的密码
+    passwd : abc
+    # 邮件服务器域名
+    domain : afbvt.com
+    # 发件人邮箱帐号
+    sender : afbvtuser1@afbvt.com
+    # 收件人邮箱帐号,可有多个,按如下格式添加或删除
+    receiver : 
+      - afbvtuser1@afbvt.com
+    # 抄送邮件人邮箱帐号,可有多个,按如下格式添加或删除,此项目的改参数必须是空
+    copy_receiver :
+      
+    # 密送邮件人邮箱帐号,可有多个,按如下格式添加或删除,此项目的改参数必须是空
+    passwd_receiver :
+      
+
+# 邮件报告的服务器配置
+mail_report :
+    # 邮件报告服务器IP
+    HOST : 200.200.0.12
+    # 发件人邮箱帐号
+    FROM : test@sangfor.com
+    # 收件人邮箱帐号,可有多个,按如下格式添加或删除
+    TO :
+      - test@sangfor.com
+    # 抄送邮件人邮箱帐号,可有多个,按如下格式添加或删除
+    CC :
+      - test@sangfor.com
+    # 密送邮件人邮箱帐号,可有多个,按如下格式添加或删除
+    BC :
+      - test@sangfor.com
+    # 邮件标题
+    TITLE : 自动化验收报告
+    # 邮件内容
+    CONTENT : 

@@ -1,0 +1,75 @@
+=begin rdoc
+模块名: 设备控制台
+描述: 封装设备控制台上的操作
+=end
+module DeviceConsole
+
+  module_function
+  
+  # 获取当前所有object_type的名称,返回数组类型
+  def get_all_object_names(list_cgi, object_type)
+    names = [] # 存放所有object_type的名称
+    all_objects = list_all_objects(list_cgi, object_type)
+    all_objects.each do |object|
+      names << object["name"]
+    end
+    ATT::KeyLog.debug("所有#{object_type}的名称:#{names.join(',')}")
+    return names
+  end
+  
+  # 获取当前所有object_type的attri_name名字的属性值,返回数组类型
+  # 王沃伦添加
+  def get_all_object_attrib(list_cgi, object_type, attrib_name)
+    attribs = [] # 存放所有object_type的名称
+    all_objects = list_all_objects(list_cgi, object_type)
+    all_objects.each do |object|
+      attribs << object[attrib_name]
+    end
+    ATT::KeyLog.debug("所有#{object_type}的 #{attrib_name}属性值是 :#{attribs.join(',')}")
+    return attribs
+  end
+  
+  # 获取所有object_type列表,返回数组,元素类型是hash
+  def list_all_objects(list_cgi, object_type)
+    post_hash = {"opr" => "list"}
+    result_hash = AF::Login.get_session().post(list_cgi, post_hash)
+    if result_hash["success"]
+      return result_hash["data"] # 数组的元素类型是hash
+    else
+      ATT::KeyLog.info("获取#{object_type}列表失败,错误消息是#{result_hash["msg"]}")
+      raise ATT::Exceptions::NotFoundError,"获取列表失败"
+    end
+  end
+  # 获取所有object_type列表,返回数组,元素类型是hash
+  def list_all_objects_with_limit(list_cgi, object_type)
+    post_hash = {"opr" => "list", "start" => 0, "limit" => 65535}
+    result_hash = AF::Login.get_session().post(list_cgi, post_hash)
+    if result_hash["success"]
+      return result_hash["data"] # 数组的元素类型是hash
+    else
+      ATT::KeyLog.info("获取#{object_type}列表失败,错误消息是#{result_hash["msg"]}")
+      raise ATT::Exceptions::NotFoundError,"获取列表失败"
+    end
+  end
+  
+  # 转换生效时间,根据时间计划的名称,获取其在下拉列表中的value
+  def convert_active_time( take_effect_time )
+    post_hash = {"opr" => "listAllTime" }
+    result_hash = AF::Login.get_session().post("/cgi-bin/objtime.cgi", post_hash)
+    if result_hash["success"]
+      all_time_plans = result_hash["data"] # 数组,元素类型是hash,格式{"name"=>"", "value"=>"", "depict"=>""}
+      all_time_plans.each do |time_plan|
+        if time_plan["name"] == take_effect_time
+          ATT::KeyLog.info("获取时间计划列表成功,#{take_effect_time}对应的值是#{time_plan["value"]}")
+          return time_plan["value"]
+        end
+      end
+      ATT::KeyLog.info("时间计划:#{take_effect_time}不存在")
+      raise ATT::Exceptions::NotFoundError,"不存在的时间计划"
+    else
+      ATT::KeyLog.info("获取时间计划列表失败,错误消息是#{result_hash["msg"]}")
+      raise ATT::Exceptions::NotFoundError,"获取时间计划列表失败"
+    end
+  end
+  
+end

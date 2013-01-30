@@ -1,0 +1,7 @@
+# coding: utf-8
+module DeviceConsole
+  module ServerProtection
+    module TamperHelper
+    end
+  end
+end
